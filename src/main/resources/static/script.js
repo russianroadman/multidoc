@@ -3,15 +3,17 @@ var blocks = document.getElementsByClassName("block");
 var editors = []
 for (const item of blocks){
 
-    /*DecoupledEditor
+    DecoupledEditor
                 .create( item.getElementsByClassName("editor")[0] )
                 .then( editor => {
+                    editors.push(editor);
                     var toolbarContainer = item.getElementsByClassName("toolbar-container")[0];
                     toolbarContainer.appendChild( editor.ui.view.toolbar.element );
                 } )
                 .catch( error => {
                     console.error( error );
-                } );*/
+                } );
+    /*
     BalloonEditor
         .create( item.getElementsByClassName("editor")[0] )
         .then( editor => {
@@ -20,6 +22,7 @@ for (const item of blocks){
         .catch( error => {
             console.error( error );
         } );
+    */
 
 }
 

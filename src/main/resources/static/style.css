@@ -20,7 +20,11 @@ body{
 
 .toolbar-container{
   transform: scale(0.8);
+  opacity: 20% !important;
+  color:red;
 }
+
+
 
 .link-button, .share-button{
   height: 4vh;
