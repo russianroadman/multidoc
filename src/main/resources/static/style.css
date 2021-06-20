@@ -9,22 +9,28 @@ body{
 }
 
 .top-bar{
-  margin-top:2vh;
-  margin-bottom:2vh;
+  top:0;
+  background:#EFEFEF;
+  border-bottom: 1px solid lightgray;
+  padding-top:2vh;
+  padding-bottom:2vh;
+  box-sizing:border-box;
   width: 100%;
-  position: relative;
+  position: fixed;
   display:flex;
   flex-direction:row;
   align-items:center;
 }
 
 .toolbar-container{
-  transform: scale(0.8);
-  opacity: 20% !important;
   color:red;
 }
 
-
+.ck-toolbar_grouping{
+  right:1vw;
+  top:1.5vh;
+  position: fixed !important;
+}
 
 .link-button, .share-button{
   height: 4vh;
@@ -45,25 +51,18 @@ body{
   margin-left:0.5vw;
 }
 
-.mdoc-title-wrapper{
-  position:absolute;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100%;
-  width:100%;
-}
-
 .mdoc-title{
   padding:1vh;
   padding-left:2vh;
   padding-right:2vh;
+  margin-left:0.5vw;
   box-sizing:border-box;
   background:white;
   border-radius:999px;
 }
 
 .content{
+  margin-top:10vh;
   width:100%;
   display:flex;
   align-items:center;

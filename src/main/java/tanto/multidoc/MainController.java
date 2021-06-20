@@ -14,7 +14,7 @@ public class MainController {
 
     @GetMapping("/redactor")
     public String redactorRequest(Model model){
-        Document document = new Document("Тестовый документ");
+        Document document = new Document("Мой документ");
 
         model.addAttribute("title", document.getTitle());
 
