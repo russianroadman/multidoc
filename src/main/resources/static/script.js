@@ -1,10 +1,80 @@
-//ck-focused
-
 
 var blocks = document.getElementsByClassName("block");
 var editors = []
-for (const item of blocks){
 
+window.onload = function() {
+    setVersion();
+    setAuthor();
+    setListenersToTextAreas();
+    arrangeEditors();
+    setListenerToDocTitle();
+};
+
+function setListenerToDocTitle(){
+    document.getElementById('mdoc-title').addEventListener('change', setDocTitle);
+}
+
+function setDocTitle(){
+    title = {
+        content : document.getElementById('mdoc-title').value
+    }
+    $.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : "save-doc-title",
+        data : JSON.stringify(title),
+        dataType : 'json',
+        success : function(data) {
+            console.log("SUCCESS: ", data);
+            $('#mdoc-title').value = data.content;
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
+    });
+}
+
+function addNewBlock(){
+
+}
+
+function setBlockTitle(){
+
+}
+
+function addNewVersion(){
+
+}
+
+function setVersionAuthor(){
+
+}
+
+function saveVersionContent(){
+
+}
+
+function searchViaAjax() {
+    search = {
+        content : editors[0].getData()
+    }
+    $.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : "test",
+        data : JSON.stringify(search),
+        dataType : 'json',
+        success : function(data) {
+            console.log("SUCCESS: ", data);
+            editors[0].setData(data.content);
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
+    });
+}
+
+for (const item of blocks){
     DecoupledEditor
                 .create( item.getElementsByClassName("editor")[0] )
                 .then( editor => {
@@ -15,25 +85,7 @@ for (const item of blocks){
                 .catch( error => {
                     console.error( error );
                 } );
-    /*
-    BalloonEditor
-        .create( item.getElementsByClassName("editor")[0] )
-        .then( editor => {
-            editors.push(editor);
-        } )
-        .catch( error => {
-            console.error( error );
-        } );
-    */
-
 }
-
-window.onload = function() {
-    setVersion();
-    setAuthor();
-    setListenersToTextAreas();
-    arrangeEditors();
-};
 
 function arrangeEditors(){
     var toolbars = document.getElementsByClassName("ck-toolbar_grouping");
@@ -45,8 +97,6 @@ function arrangeEditors(){
 
 function rearrangeEditors(index){
     console.log(index);
-    //var toolbars = document.querySelectorAll('[role="toolbar"]');
-    //var toolbars = document.getElementsByClassName("ck-toolbar");
     var toolbars = document.getElementsByClassName("ck-toolbar_grouping");
     for (var i = 0; i<toolbars.length; i++){
         toolbars[i].style.visibility = "hidden";
@@ -72,7 +122,7 @@ function setAuthor(){
 }
 
 function test(){
-    alert("!");
+    document.getElementsByClassName("editor")[0].submit();
 }
 
 function setListenersToTextAreas(){
@@ -92,6 +142,7 @@ function setListenersToTextAreas(){
         });
     }
 }
+
 
 
 

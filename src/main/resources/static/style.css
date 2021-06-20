@@ -51,7 +51,9 @@ body{
   margin-left:0.5vw;
 }
 
-.mdoc-title{
+#mdoc-title{
+  border:none;
+  outline:none;
   padding:1vh;
   padding-left:2vh;
   padding-right:2vh;
@@ -168,6 +170,12 @@ body{
     width: 5vw;
     color:grey;
     box-shadow: inset 0px -0.5vh 1vh rgba(0, 0, 80, 0.25);
+}
+
+.invisible-button{
+   background: rgba(0,0,0,0.0);
+   border:none;
+   outline:none;
 }
 
 

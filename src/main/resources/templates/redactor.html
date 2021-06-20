@@ -5,14 +5,14 @@
     <title>MDOC</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/decoupled-document/ckeditor.js"></script>
-    <!-- script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/balloon/ckeditor.js"></script -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 <body>
 
 <div class="top-bar">
     <div class="link-button"></div>
     <div class="share-button"></div>
-    <div class="mdoc-title" th:text="${title}"></div>
+    <input id="mdoc-title" th:value="${title}">
     <div class="toolbar-container"></div>
 </div>
 
@@ -22,7 +22,8 @@
         <div class="version-content" th:each="ver : ${block.getVersions()}" th:utext="${ver.getContent().getContent()}" hidden></div>
         <div class="version-author" th:each="ver : ${block.getVersions()}" th:text="${ver.getAuthor()}" hidden></div>
         <div class="block-content">
-            <div class="editor"></div>
+                <div class="editor"></div>
+                <button class="btn invisible-button" onclick="searchViaAjax()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M15.003 3h2.997v5h-2.997v-5zm8.997 1v20h-24v-24h20l4 4zm-19 5h14v-7h-14v7zm16 4h-18v9h18v-9z"/></svg></button>
         </div>
         <div class="block-controller">
             <div class="left-ctrl">
@@ -51,7 +52,7 @@
 
 </div>
 
-<center><div class="add-block-button">+</div></center>
+<center><div class="add-block-button" onclick="test()">+</div></center>
 
 
 <script src="script.js"></script>

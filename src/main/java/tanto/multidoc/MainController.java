@@ -2,10 +2,49 @@ package tanto.multidoc;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class MainController {
+
+    Document doc = MultidocApplication.getDoc();
+
+    @ResponseBody
+    @PostMapping("/test")
+    public TestResponse testRequest(@RequestBody TestRequest search){
+        return new TestResponse(search.content+"<p>kek</p>");
+    }
+
+    @ResponseBody
+    @PostMapping("new-block")
+    public NewBlockResponse newBlockRequest(@RequestBody NewBlockRequest block){
+        return new NewBlockResponse();
+    }
+
+    @ResponseBody
+    @PostMapping("new-version")
+    public NewVersionResponse newVersionRequest(@RequestBody NewVersionRequest version){
+        return new NewVersionResponse();
+    }
+
+    @ResponseBody
+    @PostMapping("save-block")
+    public SaveBlockResponse saveBlockRequest(@RequestBody SaveBlockRequest block){
+        return new SaveBlockResponse();
+    }
+
+    @ResponseBody
+    @PostMapping("save-version")
+    public SaveVersionResponse saveVersionRequest(@RequestBody SaveVersionRequest version){
+        return new SaveVersionResponse();
+    }
+
+    @ResponseBody
+    @PostMapping("save-doc-title")
+    public SaveDocResponse saveDocRequest(@RequestBody SaveDocRequest title){
+        doc.setTitle(title.content);
+        return new SaveDocResponse(title.content);
+    }
 
     @GetMapping("/")
     public String mainPageRequest(){
@@ -14,30 +53,9 @@ public class MainController {
 
     @GetMapping("/redactor")
     public String redactorRequest(Model model){
-        Document document = new Document("Мой документ");
 
-        model.addAttribute("title", document.getTitle());
-
-        Block block1 = new Block("Первый блок", "Саша (preferred)");
-        block1.addVersion("Тоже Саша", false);
-        block1.addVersion("И это Саша", false);
-        block1.getVersions().get(0).getContent().setContent("<p style=\"text-align:center;\">1 hello world 1</p>");
-        block1.getVersions().get(1).getContent().setContent("<p>1 hello world 2</p>");
-        block1.getVersions().get(2).getContent().setContent("<p>1 hello world 3</p>");
-
-        Block block2 = new Block("Второй блок", "Саша");
-        block2.addVersion("Кислов (preferred)", true);
-        block2.getVersions().get(0).getContent().setContent("<p>2 hello world 1</p>");
-        block2.getVersions().get(1).getContent().setContent("<p>2 hello world 2</p>");
-
-        Block block3 = new Block("Третий блок", "Вася (preferred)");
-        block3.getVersions().get(0).getContent().setContent("<p>3 hello world 1</p>");
-
-        document.addBlock(block1);
-        document.addBlock(block2);
-        document.addBlock(block3);
-
-        model.addAttribute("blocks", document.getBlocks());
+        model.addAttribute("title", doc.getTitle());
+        model.addAttribute("blocks", doc.getBlocks());
 
         return "redactor";
     }
