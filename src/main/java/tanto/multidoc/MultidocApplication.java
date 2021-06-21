@@ -15,7 +15,7 @@ public class MultidocApplication {
 		Block block1 = new Block("Первый блок", "Саша (preferred)");
 		block1.addVersion("Тоже Саша", false);
 		block1.addVersion("И это Саша", false);
-		block1.getVersions().get(0).getContent().setContent("<p style=\"text-align:center;\">1 hello world 1</p>");
+		block1.getVersions().get(0).getContent().setContent("<p>1 hello world 1</p>");
 		block1.getVersions().get(1).getContent().setContent("<p>1 hello world 2</p>");
 		block1.getVersions().get(2).getContent().setContent("<p>1 hello world 3</p>");
 

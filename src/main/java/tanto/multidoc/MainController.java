@@ -12,13 +12,21 @@ public class MainController {
     @ResponseBody
     @PostMapping("/test")
     public TestResponse testRequest(@RequestBody TestRequest search){
-        return new TestResponse(search.content+"<p>kek</p>");
+        return new TestResponse(search.getContent()+"<p>kek</p>");
     }
 
-    @ResponseBody
+//    @PostMapping("new-block")
+//    public String newBlockRequest(@RequestBody NewBlockRequest block, Model model){
+//        doc.addBlock(new Block(block.getAuthor(), block.getAuthor()));
+//        return "redactor";
+//    }
+
     @PostMapping("new-block")
-    public NewBlockResponse newBlockRequest(@RequestBody NewBlockRequest block){
-        return new NewBlockResponse();
+    public String newBlockRequest(@RequestBody NewBlockRequest block, Model model){
+        doc.addBlock(new Block(block.getAuthor(), block.getAuthor()));
+        model.addAttribute("title", doc.getTitle());
+        model.addAttribute("blocks", doc.getBlocks());
+        return "redactor::content";
     }
 
     @ResponseBody
@@ -28,22 +36,30 @@ public class MainController {
     }
 
     @ResponseBody
-    @PostMapping("save-block")
-    public SaveBlockResponse saveBlockRequest(@RequestBody SaveBlockRequest block){
-        return new SaveBlockResponse();
-    }
-
-    @ResponseBody
     @PostMapping("save-version")
     public SaveVersionResponse saveVersionRequest(@RequestBody SaveVersionRequest version){
         return new SaveVersionResponse();
     }
 
     @ResponseBody
+    @PostMapping("save-block-title")
+    public SaveBlockTitleResponse saveBlockRequest(@RequestBody SaveBlockTitleRequest title){
+        // TODO update document model!
+        return new SaveBlockTitleResponse(title.getContent());
+    }
+
+    @ResponseBody
+    @PostMapping("save-version-author")
+    public SaveVersionAuthorResponse saveVersionAuthorRequest(@RequestBody SaveVersionAuthorRequest author){
+        // TODO update document model!
+        return new SaveVersionAuthorResponse(author.getContent());
+    }
+
+    @ResponseBody
     @PostMapping("save-doc-title")
     public SaveDocResponse saveDocRequest(@RequestBody SaveDocRequest title){
         doc.setTitle(title.content);
-        return new SaveDocResponse(title.content);
+        return new SaveDocResponse(title.getContent() + " - ew");
     }
 
     @GetMapping("/")
