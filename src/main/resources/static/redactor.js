@@ -45,8 +45,10 @@ function saveDocTitle(element){
 }
 
 function saveBlockTitle(element){
+    var number = element.parentElement.getElementsByClassName("block-number")[0].innerHTML;
     title = {
-        content : element.value
+        content : element.value,
+        blockNumber : number
     }
     $.ajax({
         type : "POST",
@@ -65,8 +67,12 @@ function saveBlockTitle(element){
 }
 
 function saveVersionAuthor(element){
+    var bNumber = element.parentElement.parentElement.getElementsByClassName("block-number")[0].innerHTML;
+    var vNumber = element.parentElement.parentElement.getElementsByClassName("block-version")[0].innerHTML;
     author = {
-        content : element.value
+        content : element.value,
+        blockNumber : bNumber,
+        versionNumber : vNumber
     }
     $.ajax({
         type : "POST",
@@ -83,5 +89,7 @@ function saveVersionAuthor(element){
         }
     });
 }
+
+
 
 

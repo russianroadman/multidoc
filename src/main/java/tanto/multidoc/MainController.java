@@ -12,7 +12,7 @@ public class MainController {
     @ResponseBody
     @PostMapping("/test")
     public TestResponse testRequest(@RequestBody TestRequest search){
-        return new TestResponse(search.getContent()+"<p>kek</p>");
+        return new TestResponse(search.getContent());
     }
 
 //    @PostMapping("new-block")
@@ -44,22 +44,28 @@ public class MainController {
     @ResponseBody
     @PostMapping("save-block-title")
     public SaveBlockTitleResponse saveBlockRequest(@RequestBody SaveBlockTitleRequest title){
-        // TODO update document model!
-        return new SaveBlockTitleResponse(title.getContent());
+        doc.getBlocks().get(title.getBlockNumber()).setTitle(title.getContent());
+        return new SaveBlockTitleResponse(title.getContent(), Integer.toString(title.getBlockNumber()));
     }
 
     @ResponseBody
     @PostMapping("save-version-author")
     public SaveVersionAuthorResponse saveVersionAuthorRequest(@RequestBody SaveVersionAuthorRequest author){
-        // TODO update document model!
-        return new SaveVersionAuthorResponse(author.getContent());
+        doc.getBlocks()
+                .get(author.getBlockNumber())
+                .getVersions()
+                .get(author.getVersionNumber())
+                .setAuthor(author.getContent());
+        return new SaveVersionAuthorResponse(author.getContent(),
+                                             Integer.toString(author.getBlockNumber()),
+                                             Integer.toString(author.getVersionNumber()));
     }
 
     @ResponseBody
     @PostMapping("save-doc-title")
     public SaveDocResponse saveDocRequest(@RequestBody SaveDocRequest title){
         doc.setTitle(title.content);
-        return new SaveDocResponse(title.getContent() + " - ew");
+        return new SaveDocResponse(title.getContent());
     }
 
     @GetMapping("/")
@@ -69,10 +75,8 @@ public class MainController {
 
     @GetMapping("/redactor")
     public String redactorRequest(Model model){
-
         model.addAttribute("title", doc.getTitle());
         model.addAttribute("blocks", doc.getBlocks());
-
         return "redactor";
     }
 

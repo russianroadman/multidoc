@@ -7,6 +7,9 @@ public class SaveBlockTitleResponse {
     @JsonView
     String content;
 
+    @JsonView
+    String blockNumber;
+
     public String getContent() {
         return content;
     }
@@ -15,8 +18,17 @@ public class SaveBlockTitleResponse {
         this.content = content;
     }
 
-    public SaveBlockTitleResponse(String content){
+    public String getBlockNumber() {
+        return blockNumber;
+    }
+
+    public void setBlockNumber(String blockNumber) {
+        this.blockNumber = blockNumber;
+    }
+
+    public SaveBlockTitleResponse(String content, String blockNumber){
         this.content = content;
+        this.blockNumber = blockNumber;
     }
 
 }
