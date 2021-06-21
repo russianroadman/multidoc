@@ -15,17 +15,20 @@ public class MultidocApplication {
 		Block block1 = new Block("Первый блок", "Саша (preferred)");
 		block1.addVersion("Тоже Саша", false);
 		block1.addVersion("И это Саша", false);
-		block1.getVersions().get(0).getContent().setContent("<p>1 hello world 1</p>");
-		block1.getVersions().get(1).getContent().setContent("<p>1 hello world 2</p>");
-		block1.getVersions().get(2).getContent().setContent("<p>1 hello world 3</p>");
+		block1.getVersions().get(0).getContent().setContent("line 1\n" +
+															"line 2\n" +
+															"line 3\n" +
+															"line 4");
+		block1.getVersions().get(1).getContent().setContent("1 hello world 2");
+		block1.getVersions().get(2).getContent().setContent("1 hello world 3");
 
 		Block block2 = new Block("Второй блок", "Саша");
 		block2.addVersion("Кислов (preferred)", true);
-		block2.getVersions().get(0).getContent().setContent("<p>2 hello world 1</p>");
-		block2.getVersions().get(1).getContent().setContent("<p>2 hello world 2</p>");
+		block2.getVersions().get(0).getContent().setContent("2 hello world 1");
+		block2.getVersions().get(1).getContent().setContent("2 hello world 2");
 
 		Block block3 = new Block("Третий блок", "Вася (preferred)");
-		block3.getVersions().get(0).getContent().setContent("<p>3 hello world 1</p>");
+		block3.getVersions().get(0).getContent().setContent("3 hello world 1");
 
 		doc.addBlock(block1);
 		doc.addBlock(block2);

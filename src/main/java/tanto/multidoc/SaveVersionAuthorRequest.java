@@ -7,6 +7,12 @@ public class SaveVersionAuthorRequest {
     @JsonView
     String content;
 
+    @JsonView
+    String blockNumber;
+
+    @JsonView
+    String versionNumber;
+
     public String getContent() {
         return content;
     }
@@ -15,4 +21,21 @@ public class SaveVersionAuthorRequest {
         this.content = content;
     }
 
+    public int getBlockNumber() {
+        int out = Integer.parseInt(blockNumber)-1;
+        return out;
+    }
+
+    public void setBlockNumber(String blockNumber) {
+        this.blockNumber = blockNumber;
+    }
+
+    public int getVersionNumber() {
+        int out = Integer.parseInt(versionNumber)-1;
+        return out;
+    }
+
+    public void setVersionNumber(String versionNumber) {
+        this.versionNumber = versionNumber;
+    }
 }

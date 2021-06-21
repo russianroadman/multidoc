@@ -15,6 +15,7 @@ public class Document {
         for (Block block : blocks){
             block.getVersions().get(0).getContent().getContent();
             blocks.indexOf(block);
+            block.getVersions().get(0).getContent().getContent();
             block.getTitle();
             block.getVersions().size();
             block.getVersions().get(0).getAuthor();
