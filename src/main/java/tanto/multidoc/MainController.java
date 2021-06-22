@@ -23,7 +23,7 @@ public class MainController {
 
     @PostMapping("new-block")
     public String newBlockRequest(@RequestBody NewBlockRequest block, Model model){
-        doc.addBlock(new Block(block.getAuthor(), block.getAuthor()));
+        doc.addBlock(new Block(block.getBlockTitle(), block.getAuthor()));
         model.addAttribute("title", doc.getTitle());
         model.addAttribute("blocks", doc.getBlocks());
         return "redactor::content";
@@ -38,7 +38,17 @@ public class MainController {
     @ResponseBody
     @PostMapping("save-version")
     public SaveVersionResponse saveVersionRequest(@RequestBody SaveVersionRequest version){
-        return new SaveVersionResponse();
+        doc.getBlocks()
+            .get(version.getBlockNumber())
+            .getVersions()
+            .get(version.getVersionNumber())
+            .getContent()
+            .setContent(version.getContent());
+        return new SaveVersionResponse(
+                version.getContent(),
+                Integer.toString(version.getBlockNumber()),
+                Integer.toString(version.getVersionNumber())
+        );
     }
 
     @ResponseBody

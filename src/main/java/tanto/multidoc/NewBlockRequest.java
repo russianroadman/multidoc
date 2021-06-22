@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonView;
 public class NewBlockRequest {
 
     @JsonView
-    String blocktitle;
+    String blockTitle;
 
     @JsonView
     String author;
 
-    public String getBlocktitle() {
-        return blocktitle;
+    public String getBlockTitle() {
+        return blockTitle;
     }
 
-    public void setBlocktitle(String blocktitle) {
-        this.blocktitle = blocktitle;
+    public void setBlockTitle(String blockTitle) {
+        this.blockTitle = blockTitle;
     }
 
     public String getAuthor() {

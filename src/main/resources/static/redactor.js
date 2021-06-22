@@ -90,6 +90,50 @@ function saveVersionAuthor(element){
     });
 }
 
+function saveVersion(element){
+    var bNumber = element.parentElement.parentElement.parentElement.getElementsByClassName("block-number")[0].innerHTML;
+    var vNumber = element.parentElement.parentElement.parentElement.getElementsByClassName("block-version")[0].innerHTML;
+    version = {
+        content : element.value,
+        blockNumber : bNumber,
+        versionNumber : vNumber
+    }
+    $.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : "save-version",
+        data : JSON.stringify(version),
+        dataType : 'json',
+        success : function(data) {
+            console.log("SUCCESS: ", data);
+            element.value = data.content;
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
+    });
+}
+
+function addNewBlock(element){
+    element.style.visibility = "hidden";
+    block = {
+        blockTitle : document.getElementById("new-block-title").value,
+        author : document.getElementById("new-block-author").value,
+    }
+    $.ajax({
+        url: 'new-block',
+        type: 'POST',
+        contentType : "application/json",
+        data : JSON.stringify(block),
+        success: function (data) {
+            document.getElementById("content").outerHTML = data;
+            autosizeTextAreas();
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
+    })
+}
 
 
 

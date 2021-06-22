@@ -245,6 +245,7 @@ body{
 }
 
 #add-block-button{
+    margin-bottom: 1%;
     display:flex;
     padding-top:0.5vh;
     padding-bottom:0.5vh;
