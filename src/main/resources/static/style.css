@@ -3,6 +3,12 @@
     padding:0;
 }
 
+button{
+   border:none;
+   outline:none;
+   background:white;
+}
+
 body{
   font-family: consolas;
   background:#EFEFEF;
@@ -63,7 +69,7 @@ body{
   border-radius:999px;
 }
 
-#new-block{
+#new-block, #new-version{
   visibility: hidden;
   background:white;
   border-radius:4vh;
@@ -81,7 +87,7 @@ body{
   box-shadow: 0 0 1vw 1vw rgba(0, 0, 0, 0.1);
 }
 
-.new-block-input{
+.new-block-input, #new-version-author{
   width:90%;
   height:15%;
   padding-left:1vw;
@@ -93,7 +99,7 @@ body{
   outline: none;
 }
 
-#new-block-submit{
+#new-block-submit, #new-version-submit{
   position:absolute;
   bottom:0;
   width:100%;
@@ -105,7 +111,7 @@ body{
   border-radius: 0 0 4vh 4vh;
 }
 
-#new-block-sign{
+#new-block-sign, #new-version-sign{
   position:absolute;
   top:0;
   width:100%;
@@ -117,7 +123,7 @@ body{
   border-radius: 4vh 4vh 0 0;
 }
 
-#new-block-close{
+#new-block-close, #new-version-close{
   position:absolute;
   right:0;
   height:100%;

@@ -18,6 +18,20 @@ function hideNewBlock(){
     document.getElementById('new-block').style.visibility = "hidden";
 }
 
+function showNewVersion(element){
+    var blockNumber = element.parentElement.parentElement.getElementsByClassName("block-number")[0].innerHTML;
+    var blockTitle = element.parentElement.parentElement.getElementsByClassName("block-name")[0].value;
+    document.getElementById('new-version-block-number').innerHTML = blockNumber;
+    document.getElementById('new-version-block-title').innerHTML = blockTitle;
+    document.getElementById('new-version').style.visibility = "visible";
+}
+
+function hideNewVersion(){
+    document.getElementById('new-version').style.visibility = "hidden";
+}
+
+
+
 /****************************************************************/
 /***************************** AJAX *****************************/
 /****************************************************************/
@@ -135,5 +149,96 @@ function addNewBlock(element){
     })
 }
 
+function addNewVersion(element){
+    element.style.visibility = "hidden";
+    var bNum = parseInt(document.getElementById("new-version-block-number").innerHTML);
+    var vNum = parseInt(document.getElementsByClassName("block")[bNum-1]
+        .getElementsByClassName("block-max-version")[0]
+        .innerHTML);
+    version = {
+        author : document.getElementById("new-version-author").value,
+        blockNumber : bNum
+    }
+    loc = {
+        blockNumber : bNum,
+        versionNumber : vNum,
+        right : "true"
+    }
+    $.ajax({
+        url: 'new-version',
+        type: 'POST',
+        contentType : "application/json",
+        data : JSON.stringify(version),
+        success: function (data) {
+            document.getElementById("content").outerHTML = data;
+            /* nested ajax */
+            $.ajax({
+                url: 'change-version',
+                type: 'POST',
+                contentType : "application/json",
+                data : JSON.stringify(loc),
+                dataType : 'json',
+                success: function (data) {
+                    console.log("SUCCESS: ", data);
+                    element = document.getElementsByClassName("block")[bNum-1];
+                    var text = element.getElementsByClassName("textarea-editor")[0];
+                    text.value = data.content;
+                    text.style.height = "auto";
+                    text.style.height = text.scrollHeight+'px';
+                    element.getElementsByClassName("block-version")[0].innerHTML = vNum+1;
+                    autosizeTextAreas();
+                },
+                error : function(e) {
+                    console.log("ERROR: ", e);
+                }
+            })
+            /* end of nested ajax */
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
+    })
+}
+
+function changeVersion(element, right){
+    var currentBlockNumber = parseInt(element.parentElement.parentElement.parentElement.getElementsByClassName("block-number")[0].innerHTML);
+    var currentVersionNumber = parseInt(element.parentElement.parentElement.parentElement.getElementsByClassName("block-version")[0].innerHTML);
+    var maxVersion = parseInt(element.parentElement.parentElement.parentElement.getElementsByClassName("block-max-version")[0].innerHTML);
+    if ( (currentVersionNumber > 1 && right == false) || (currentVersionNumber < maxVersion && right == true) ){
+        if (right) { right = "true" } else { right = "false" }
+        loc = {
+            blockNumber : currentBlockNumber,
+            versionNumber : currentVersionNumber,
+            right : right
+        }
+        console.log(loc);
+        $.ajax({
+            url: 'change-version',
+            type: 'POST',
+            contentType : "application/json",
+            data : JSON.stringify(loc),
+            dataType : 'json',
+            success: function (data) {
+                console.log("SUCCESS: ", data);
+                var text = element.parentElement.parentElement.parentElement
+                    .getElementsByClassName("textarea-editor")[0];
+                text.value = data.content;
+                text.style.height = "auto";
+                text.style.height = text.scrollHeight+'px';
+                if (right == "true"){
+                    element.parentElement.parentElement.parentElement
+                        .getElementsByClassName("block-version")[0].innerHTML = currentVersionNumber+1;
+                } else {
+                    element.parentElement.parentElement.parentElement
+                        .getElementsByClassName("block-version")[0].innerHTML = currentVersionNumber-1;
+                }
+                autosizeTextAreas();
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+            }
+        })
+    }
+}
 
 

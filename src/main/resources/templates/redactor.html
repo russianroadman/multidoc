@@ -18,10 +18,23 @@
 </div>
 
 <div id="new-block">
-    <div id="new-block-sign">Добавить новый блок<div id="new-block-close" onclick="hideNewBlock()">X</div></div>
+    <div id="new-block-sign">Добавить новый блок<button id="new-block-close" onclick="hideNewBlock()">X</button></div>
     <input class="new-block-input" id="new-block-title" placeholder="Название блока">
     <input class="new-block-input" id="new-block-author" placeholder="Автор">
-    <div id="new-block-submit" onclick="addNewBlock(this.parentElement);">Создать</div>
+    <button id="new-block-submit" onclick="addNewBlock(this.parentElement)">Создать</button>
+</div>
+
+<div id="new-version">
+    <div id="new-version-sign">Добавить новую версию<button id="new-version-close" onclick="hideNewVersion()">X</button></div>
+    <div style="display:flex">
+        <div>К блоку #</div><div id="new-version-block-number"></div>
+    </div>
+    <div style="display:flex">
+        "<div id="new-version-block-title"></div>"
+    </div>
+    <br>
+    <input id="new-version-author" placeholder="Автор">
+    <button id="new-version-submit" onclick="addNewVersion(this.parentElement)">Создать</button>
 </div>
 
 <div id="content" th:fragment="content">
@@ -39,17 +52,17 @@
                 <input class="block-name" onchange="saveBlockTitle(this)" th:value="${block.getTitle()}">
             </div>
             <div class="middle-ctrl">
-                <div class="block-left">
+                <button class="block-left" onclick="changeVersion(this, false)">
                     <
-                </div>
-                <div class="block-version">1</div><div class="block-version" th:text=" '/' + ${block.getVersions().size()} "></div>
-                <div class="block-right">
+                </button>
+                <div class="block-version">1</div>/<div class="block-version block-max-version" th:text="${block.getVersions().size()}"></div>
+                <button class="block-right" onclick="changeVersion(this, true)">
                     >
-                </div>
+                </button>
             </div>
             <div class="right-ctrl">
                 <input class="block-author" th:value="${block.getVersions().get(0).getAuthor()}" onchange="saveVersionAuthor(this)">
-                <div class="block-add-version">
+                <div class="block-add-version" onclick="showNewVersion(this)">
                     +
                 </div>
             </div>

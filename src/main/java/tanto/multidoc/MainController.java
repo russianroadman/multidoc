@@ -15,11 +15,27 @@ public class MainController {
         return new TestResponse(search.getContent());
     }
 
-//    @PostMapping("new-block")
-//    public String newBlockRequest(@RequestBody NewBlockRequest block, Model model){
-//        doc.addBlock(new Block(block.getAuthor(), block.getAuthor()));
-//        return "redactor";
-//    }
+    @ResponseBody
+    @PostMapping("change-version")
+    public ChangeVersionResponse changeVersionRequest(@RequestBody ChangeVersionRequest loc){
+        String out;
+        if (loc.getRight().equals("true")){
+            out = doc.getBlocks()
+                .get(loc.getBlockNumber())
+                .getVersions()
+                .get(loc.getVersionNumber()+1)
+                .getContent()
+                .getContent();
+        } else {
+            out = doc.getBlocks()
+                .get(loc.getBlockNumber())
+                .getVersions()
+                .get(loc.getVersionNumber()-1)
+                .getContent()
+                .getContent();
+        }
+        return new ChangeVersionResponse(out);
+    }
 
     @PostMapping("new-block")
     public String newBlockRequest(@RequestBody NewBlockRequest block, Model model){
@@ -29,10 +45,14 @@ public class MainController {
         return "redactor::content";
     }
 
-    @ResponseBody
     @PostMapping("new-version")
-    public NewVersionResponse newVersionRequest(@RequestBody NewVersionRequest version){
-        return new NewVersionResponse();
+    public String newVersionRequest(@RequestBody NewVersionRequest version, Model model){
+        Version ver = new Version(version.getAuthor(), false);
+        ver.getContent().setContent("");
+        doc.getBlocks().get(version.getBlockNumber()).addVersion(ver);
+        model.addAttribute("title", doc.getTitle());
+        model.addAttribute("blocks", doc.getBlocks());
+        return "redactor::content";
     }
 
     @ResponseBody

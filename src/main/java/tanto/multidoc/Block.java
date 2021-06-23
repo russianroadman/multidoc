@@ -24,6 +24,10 @@ public class Block {
         versions.add(version);
     }
 
+    public void addVersion(Version version){
+        versions.add(version);
+    }
+
     public void deleteVersion(int index){
         if (versions.get(index).isPreferred()){
             versions.remove(index);

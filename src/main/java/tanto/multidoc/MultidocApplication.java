@@ -25,7 +25,10 @@ public class MultidocApplication {
 		Block block2 = new Block("Второй блок", "Саша");
 		block2.addVersion("Кислов (preferred)", true);
 		block2.getVersions().get(0).getContent().setContent("2 hello world 1");
-		block2.getVersions().get(1).getContent().setContent("2 hello world 2");
+		block2.getVersions().get(1).getContent().setContent("line 1\n" +
+				"line 2\n" +
+				"line 3\n" +
+				"line 4");
 
 		Block block3 = new Block("Третий блок", "Вася (preferred)");
 		block3.getVersions().get(0).getContent().setContent("3 hello world 1");
