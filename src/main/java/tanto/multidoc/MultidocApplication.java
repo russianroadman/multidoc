@@ -10,28 +10,18 @@ public class MultidocApplication {
 
 	public static void main(String[] args) {
 
-		doc = new Document("Мой документ");
+		doc = new Document("My Multidoc");
 
-		Block block1 = new Block("Первый блок", "Саша (preferred)");
-		block1.addVersion("Тоже Саша", false);
-		block1.addVersion("И это Саша", false);
-		block1.getVersions().get(0).getContent().setContent("line 1\n" +
-															"line 2\n" +
-															"line 3\n" +
-															"line 4");
-		block1.getVersions().get(1).getContent().setContent("1 hello world 2");
-		block1.getVersions().get(2).getContent().setContent("1 hello world 3");
+		Block block1 = new Block("Great First block", "Sample Author");
+		block1.getVersions().get(0).getContent().setContent("Block that was created by Sample Author");
 
-		Block block2 = new Block("Второй блок", "Саша");
-		block2.addVersion("Кислов (preferred)", true);
-		block2.getVersions().get(0).getContent().setContent("2 hello world 1");
-		block2.getVersions().get(1).getContent().setContent("line 1\n" +
-				"line 2\n" +
-				"line 3\n" +
-				"line 4");
+		Block block2 = new Block("Magnificent Second block", "Another Author");
+		block2.addVersion("Different Author", true);
+		block2.getVersions().get(0).getContent().setContent("Block and its content that was created by Another Author");
+		block2.getVersions().get(1).getContent().setContent("Different content for the block that Different Author made");
 
-		Block block3 = new Block("Третий блок", "Вася (preferred)");
-		block3.getVersions().get(0).getContent().setContent("3 hello world 1");
+		Block block3 = new Block("Incredible Third block", "Different Author");
+		block3.getVersions().get(0).getContent().setContent("Block that was created by Different Author");
 
 		doc.addBlock(block1);
 		doc.addBlock(block2);

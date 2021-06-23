@@ -2,14 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
-    <script type="module" src="script.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/decoupled-document/ckeditor.js"></script>
+    <title>MDOC</title>
+    <link href="index-style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <h1>Welcome at index page</h1>
-    <a href="/redactor">go to redactor</a>
+
+    <div class="welcome-wrapper">
+        <div class="welcome">
+            <div>MULTIDOC</div>
+            <a class="hidden-link" href="/info">
+                <div class="welcome-more">
+                    <div>more </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="6pt" height="6pt" viewBox="0 0 24 24"><path d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></svg>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+    <a href="/redactor" id="create-new">Create new Multidoc</a>
+
+    <a href="/redactor" id="use-default">Use example template</a>
 
 </body>
 </html>

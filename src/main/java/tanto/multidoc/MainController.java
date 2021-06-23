@@ -14,6 +14,11 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping("/info")
+    public String infoRequest(){
+        return "info";
+    }
+
     @GetMapping("/redactor")
     public String redactorRequest(Model model){
         model.addAttribute("title", doc.getTitle());

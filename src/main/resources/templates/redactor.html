@@ -18,23 +18,23 @@
 </div>
 
 <div id="new-block">
-    <div id="new-block-sign">Добавить новый блок<button id="new-block-close" onclick="hideNewBlock()">X</button></div>
-    <input class="new-block-input" id="new-block-title" placeholder="Название блока">
-    <input class="new-block-input" id="new-block-author" placeholder="Автор">
-    <button id="new-block-submit" onclick="addNewBlock(this.parentElement)">Создать</button>
+    <div id="new-block-sign">Add new block<button id="new-block-close" onclick="hideNewBlock()">X</button></div>
+    <input class="new-block-input" id="new-block-title" placeholder="Block title">
+    <input class="new-block-input" id="new-block-author" placeholder="Author">
+    <button id="new-block-submit" onclick="addNewBlock(this.parentElement)">Create new block</button>
 </div>
 
 <div id="new-version">
-    <div id="new-version-sign">Добавить новую версию<button id="new-version-close" onclick="hideNewVersion()">X</button></div>
+    <div id="new-version-sign">Add new version<button id="new-version-close" onclick="hideNewVersion()">X</button></div>
     <div style="display:flex">
-        <div>К блоку #</div><div id="new-version-block-number"></div>
+        <div>To block #</div><div id="new-version-block-number"></div>
     </div>
     <div style="display:flex">
         "<div id="new-version-block-title"></div>"
     </div>
     <br>
-    <input id="new-version-author" placeholder="Автор">
-    <button id="new-version-submit" onclick="addNewVersion(this.parentElement)">Создать</button>
+    <input id="new-version-author" placeholder="Author">
+    <button id="new-version-submit" onclick="addNewVersion(this.parentElement)">Create new version</button>
 </div>
 
 <div id="content" th:fragment="content">
@@ -44,7 +44,6 @@
         <div class="version-author" th:each="ver : ${block.getVersions()}" th:text="${ver.getAuthor()}" hidden></div>
         <div class="block-content">
             <div class="editor"><textarea class="textarea-editor" onchange="saveVersion(this)">[[${block.getVersions().get(0).getContent().getContent()}]]</textarea></div>
-                <!--button class="btn invisible-button" onclick="searchViaAjax()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M15.003 3h2.997v5h-2.997v-5zm8.997 1v20h-24v-24h20l4 4zm-19 5h14v-7h-14v7zm16 4h-18v9h18v-9z"/></svg></button-->
         </div>
         <div class="block-controller">
             <div class="left-ctrl">
@@ -62,9 +61,9 @@
             </div>
             <div class="right-ctrl">
                 <input class="block-author" th:value="${block.getVersions().get(0).getAuthor()}" onchange="saveVersionAuthor(this)">
-                <div class="block-add-version" onclick="showNewVersion(this)">
+                <button class="block-add-version" onclick="showNewVersion(this)">
                     +
-                </div>
+                </button>
             </div>
         </div>
     </div>
@@ -75,7 +74,6 @@
 <center><div id="add-block-button" onclick="showNewBlock()">+</div></center>
 
 
-<!-- script src="script.js"></script -->
 <script src="redactor.js"></script>
 
 </body>
