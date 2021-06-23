@@ -7,8 +7,20 @@ public class ChangeVersionResponse {
     @JsonView
     String content;
 
-    public ChangeVersionResponse(String content) {
+    @JsonView
+    String author;
+
+    public ChangeVersionResponse(String content, String author) {
         this.content = content;
+        this.author = author;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getContent() {

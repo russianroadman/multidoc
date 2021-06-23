@@ -9,16 +9,23 @@ public class MainController {
 
     Document doc = MultidocApplication.getDoc();
 
-    @ResponseBody
-    @PostMapping("/test")
-    public TestResponse testRequest(@RequestBody TestRequest search){
-        return new TestResponse(search.getContent());
+    @GetMapping("/")
+    public String mainPageRequest(){
+        return "index";
+    }
+
+    @GetMapping("/redactor")
+    public String redactorRequest(Model model){
+        model.addAttribute("title", doc.getTitle());
+        model.addAttribute("blocks", doc.getBlocks());
+        return "redactor";
     }
 
     @ResponseBody
     @PostMapping("change-version")
     public ChangeVersionResponse changeVersionRequest(@RequestBody ChangeVersionRequest loc){
         String out;
+        String author;
         if (loc.getRight().equals("true")){
             out = doc.getBlocks()
                 .get(loc.getBlockNumber())
@@ -26,6 +33,11 @@ public class MainController {
                 .get(loc.getVersionNumber()+1)
                 .getContent()
                 .getContent();
+            author = doc.getBlocks()
+                    .get(loc.getBlockNumber())
+                    .getVersions()
+                    .get(loc.getVersionNumber()+1)
+                    .getAuthor();
         } else {
             out = doc.getBlocks()
                 .get(loc.getBlockNumber())
@@ -33,8 +45,13 @@ public class MainController {
                 .get(loc.getVersionNumber()-1)
                 .getContent()
                 .getContent();
+            author = doc.getBlocks()
+                    .get(loc.getBlockNumber())
+                    .getVersions()
+                    .get(loc.getVersionNumber()-1)
+                    .getAuthor();
         }
-        return new ChangeVersionResponse(out);
+        return new ChangeVersionResponse(out, author);
     }
 
     @PostMapping("new-block")
@@ -96,18 +113,6 @@ public class MainController {
     public SaveDocResponse saveDocRequest(@RequestBody SaveDocRequest title){
         doc.setTitle(title.content);
         return new SaveDocResponse(title.getContent());
-    }
-
-    @GetMapping("/")
-    public String mainPageRequest(){
-        return "index";
-    }
-
-    @GetMapping("/redactor")
-    public String redactorRequest(Model model){
-        model.addAttribute("title", doc.getTitle());
-        model.addAttribute("blocks", doc.getBlocks());
-        return "redactor";
     }
 
 }

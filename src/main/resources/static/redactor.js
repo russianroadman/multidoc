@@ -181,6 +181,7 @@ function addNewVersion(element){
                 success: function (data) {
                     console.log("SUCCESS: ", data);
                     element = document.getElementsByClassName("block")[bNum-1];
+                    element.getElementsByClassName("block-author")[0].value = data.author;
                     var text = element.getElementsByClassName("textarea-editor")[0];
                     text.value = data.content;
                     text.style.height = "auto";
@@ -220,6 +221,9 @@ function changeVersion(element, right){
             dataType : 'json',
             success: function (data) {
                 console.log("SUCCESS: ", data);
+
+                element.parentElement.parentElement.getElementsByClassName("block-author")[0].value = data.author;
+
                 var text = element.parentElement.parentElement.parentElement
                     .getElementsByClassName("textarea-editor")[0];
                 text.value = data.content;
