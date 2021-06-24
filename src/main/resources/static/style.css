@@ -18,14 +18,36 @@ body{
   top:0;
   background:#EFEFEF;
   border-bottom: 1px solid lightgray;
-  padding-top:2vh;
-  padding-bottom:2vh;
   box-sizing:border-box;
+  height:8vh;
   width: 100%;
   position: fixed;
   display:flex;
   flex-direction:row;
   align-items:center;
+}
+
+.button-container-wrapper{
+    display:flex;
+    flex-direction:column;
+    height:100%;
+}
+
+.button-container{
+    height:50%;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+}
+
+.button-container-button{
+    margin-left:1vh;
+    padding-left:1vw;
+    padding-right:1vw;
+    box-sizing:border-box;
+    height:80%;
+    border-radius:999px;
+    font-size:10pt;
 }
 
 #toolbar-container{
@@ -225,13 +247,25 @@ body{
 }
 
 .block-left{
+  background: #EFEFEF;
+  border-radius: 999px;
   margin:1%;
-  padding:1%;
+  padding-left:2%;
+  padding-right:2%;
+  padding-top:1%;
+  padding-bottom:1%;
+  box-sizing:border-box;
 }
 
 .block-right{
+  background: #EFEFEF;
+  border-radius: 999px;
   margin:1%;
-  padding:1%;
+  padding-left:2%;
+  padding-right:2%;
+  padding-top:1%;
+  padding-bottom:1%;
+  box-sizing:border-box;
 }
 
 .block-author{

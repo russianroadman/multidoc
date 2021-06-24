@@ -41,9 +41,10 @@ body {
     padding-right:4pt;
     box-sizing:border-box;
     font-size:10pt;
-    color:black;
-    background:#FF9B00;
+    color:white;
+    background:#9559FF;
     border-radius: 999px;
+
     display:flex;
     justify-content:center;
     align-items:center;
