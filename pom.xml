@@ -12,6 +12,7 @@
 	<artifactId>multidoc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>multidoc</name>
+	<appName>multidoc</appName>
 	<description>Block-based document with different authors (variations) for each block</description>
 	<properties>
 		<java.version>11</java.version>
