@@ -1,7 +1,10 @@
-package tanto.multidoc;
+package tanto.multidoc.Functionality;
 
-public class TestRequest {
+import com.fasterxml.jackson.annotation.JsonView;
 
+public class SaveDocRequest {
+
+    @JsonView
     String content;
 
     public String getContent() {
@@ -11,4 +14,5 @@ public class TestRequest {
     public void setContent(String content) {
         this.content = content;
     }
+
 }

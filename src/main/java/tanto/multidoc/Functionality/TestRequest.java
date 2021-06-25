@@ -1,8 +1,8 @@
-package tanto.multidoc;
+package tanto.multidoc.Functionality;
 
-public class Content {
+public class TestRequest {
 
-    private String content;
+    String content;
 
     public String getContent() {
         return content;

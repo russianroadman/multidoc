@@ -1,10 +1,19 @@
-package tanto.multidoc;
+package tanto.multidoc.model;
 
+import javax.persistence.*;
+
+@Entity
 public class Version {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "default_sequence")
+    private Integer id;
     private String author;
-    private Content content = new Content();
+    @Column(columnDefinition = "TEXT")
+    private String content = "";
     private boolean isPreferred = false;
+
+    public Version(){}
 
     public Version(String author, boolean isPreferred){
         this.author = author;
@@ -31,11 +40,11 @@ public class Version {
         isPreferred = true;
     }
 
-    public Content getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(Content content) {
+    public void setContent(String content) {
         this.content = content;
     }
 

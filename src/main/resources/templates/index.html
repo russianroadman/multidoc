@@ -20,10 +20,31 @@
         </div>
     </div>
 
+    <form action="new-multidoc" id="create-new-mdoc" method="post">
+        <input class="new-doc-input" id="docTitle" name="docTitle" placeholder="Document title">
+        <input class="new-doc-input" id="blockTitle" name="blockTitle" placeholder="First block title">
+        <input class="new-doc-input" id="author" name="author" placeholder="Author name">
+        <button id="create-new" type="button" onclick="create()">Create new Multidoc</button>
+    </form>
 
-    <a href="/redactor" id="create-new">Create new Multidoc</a>
 
-    <a href="/redactor" id="use-default">Use example template</a>
+<!--    <a href="/redactor" id="use-default">Use example template</a>-->
+
+    <div class="made-by">
+        <div>Made by Kislov Alexander</div>
+        <div>Irkutsk 2021</div>
+    </div>
+
+    <script>
+        function create(){
+            var d = document.getElementById('docTitle').value;
+            var b = document.getElementById('blockTitle').value;
+            var a = document.getElementById('author').value;
+            if ( d != '' && b != '' && a != '' ){
+                document.getElementById('create-new-mdoc').submit();
+            }
+        }
+    </script>
 
 </body>
 </html>

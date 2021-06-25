@@ -1,13 +1,35 @@
 package tanto.multidoc;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import tanto.multidoc.Functionality.*;
+import tanto.multidoc.model.Block;
+import tanto.multidoc.model.Document;
+import tanto.multidoc.model.Version;
+import tanto.multidoc.repos.BlockRepository;
+import tanto.multidoc.repos.DocumentRepository;
+import tanto.multidoc.repos.VersionRepository;
+import tanto.multidoc.util.Util;
+
+import java.util.Optional;
+
 @Controller
 public class MainController {
 
-    Document doc = MultidocApplication.getDoc();
+    Document doc = MultidocApplication.getExample();
+
+    @Autowired
+    DocumentRepository documentRepository;
+
+    @Autowired
+    BlockRepository blockRepository;
+
+    @Autowired
+    VersionRepository versionRepository;
 
     @GetMapping("/")
     public String mainPageRequest(){
@@ -16,27 +38,134 @@ public class MainController {
 
     @GetMapping("/info")
     public String infoRequest(){
+        System.out.println("jej");
         return "info";
     }
 
-    @GetMapping("/redactor")
-    public String redactorRequest(Model model){
-        model.addAttribute("title", doc.getTitle());
-        model.addAttribute("blocks", doc.getBlocks());
+    @GetMapping("redactor")
+    public String redactorRequest(Model model, @RequestParam String link){
+        System.out.println("kek");
+        Optional<Document> doc = documentRepository.findById(link);
+        model.addAttribute("title", doc.get().getTitle());
+        model.addAttribute("blocks", doc.get().getBlocks());
+        /*model.addAttribute("title", doc.getTitle());
+        model.addAttribute("blocks", doc.getBlocks());*/
         return "redactor";
+    }
+
+//    @GetMapping("redactor")
+//    public String redactorRequest(Model model){
+//        /*Optional<Document> doc = documentRepository.findById(link);
+//        model.addAttribute("title", doc.get().getTitle());
+//        model.addAttribute("blocks", doc.get().getBlocks());*/
+//        System.out.println("ioi");
+//        model.addAttribute("title", doc.getTitle());
+//        model.addAttribute("blocks", doc.getBlocks());
+//        return "redactor";
+//    }
+
+    @PostMapping("new-multidoc")
+    public String newMultidocRequest(RedirectAttributes attributes,
+                                     @RequestParam String docTitle,
+                                     @RequestParam String blockTitle,
+                                     @RequestParam String author){
+
+        Version version = new Version(author, true);
+        versionRepository.save(version);
+
+        Block block = new Block(blockTitle, version);
+        blockRepository.save(block);
+
+        String link = Util.getUniqueLink();
+        Document doc = new Document(docTitle, link);
+        doc.addBlock(block);
+        documentRepository.save(doc);
+
+        //model.addAttribute("title", doc.getTitle());
+        //model.addAttribute("blocks", doc.getBlocks());
+
+        attributes.addAttribute("link", link);
+
+        return "redirect:redactor";
+    }
+
+    @PostMapping("new-block")
+    public String newBlockRequest(@RequestBody NewBlockRequest block, Model model){
+
+        /*doc.addBlock(new Block(block.getBlockTitle(), block.getAuthor()));
+        model.addAttribute("title", doc.getTitle());
+        model.addAttribute("blocks", doc.getBlocks());*/
+
+        return "redactor::content";
+    }
+
+    @PostMapping("new-version")
+    public String newVersionRequest(@RequestBody NewVersionRequest version, Model model){
+        Version ver = new Version(version.getAuthor(), false);
+        ver.setContent("");
+
+        /*doc.getBlocks().get(version.getBlockNumber()).addVersion(ver);
+        model.addAttribute("title", doc.getTitle());
+        model.addAttribute("blocks", doc.getBlocks());*/
+
+        return "redactor::content";
+    }
+
+    @ResponseBody
+    @PostMapping("save-version")
+    public SaveVersionResponse saveVersionRequest(@RequestBody SaveVersionRequest version){
+
+        /*doc.getBlocks()
+            .get(version.getBlockNumber())
+            .getVersions()
+            .get(version.getVersionNumber())
+            .setContent(version.getContent());*/
+
+        return new SaveVersionResponse(
+                version.getContent(),
+                Integer.toString(version.getBlockNumber()),
+                Integer.toString(version.getVersionNumber())
+        );
+    }
+
+    @ResponseBody
+    @PostMapping("save-block-title")
+    public SaveBlockTitleResponse saveBlockRequest(@RequestBody SaveBlockTitleRequest title){
+        //doc.getBlocks().get(title.getBlockNumber()).setTitle(title.getContent());
+        return new SaveBlockTitleResponse(title.getContent(), Integer.toString(title.getBlockNumber()));
+    }
+
+    @ResponseBody
+    @PostMapping("save-version-author")
+    public SaveVersionAuthorResponse saveVersionAuthorRequest(@RequestBody SaveVersionAuthorRequest author){
+        /*doc.getBlocks()
+                .get(author.getBlockNumber())
+                .getVersions()
+                .get(author.getVersionNumber())
+                .setAuthor(author.getContent());*/
+        return new SaveVersionAuthorResponse(author.getContent(),
+                                             Integer.toString(author.getBlockNumber()),
+                                             Integer.toString(author.getVersionNumber()));
+    }
+
+    @ResponseBody
+    @PostMapping("save-doc-title")
+    public SaveDocResponse saveDocRequest(@RequestBody SaveDocRequest title){
+        //doc.setTitle(title.getContent());
+        return new SaveDocResponse(title.getContent());
     }
 
     @ResponseBody
     @PostMapping("change-version")
     public ChangeVersionResponse changeVersionRequest(@RequestBody ChangeVersionRequest loc){
-        String out;
-        String author;
-        if (loc.getRight().equals("true")){
+        String out = null;
+        String author = null;
+
+        /*if (loc.getRight().equals("true")){
             out = doc.getBlocks()
                 .get(loc.getBlockNumber())
                 .getVersions()
                 .get(loc.getVersionNumber()+1)
-                .getContent()
                 .getContent();
             author = doc.getBlocks()
                     .get(loc.getBlockNumber())
@@ -48,76 +177,15 @@ public class MainController {
                 .get(loc.getBlockNumber())
                 .getVersions()
                 .get(loc.getVersionNumber()-1)
-                .getContent()
                 .getContent();
             author = doc.getBlocks()
                     .get(loc.getBlockNumber())
                     .getVersions()
                     .get(loc.getVersionNumber()-1)
                     .getAuthor();
-        }
+        }*/
+
         return new ChangeVersionResponse(out, author);
-    }
-
-    @PostMapping("new-block")
-    public String newBlockRequest(@RequestBody NewBlockRequest block, Model model){
-        doc.addBlock(new Block(block.getBlockTitle(), block.getAuthor()));
-        model.addAttribute("title", doc.getTitle());
-        model.addAttribute("blocks", doc.getBlocks());
-        return "redactor::content";
-    }
-
-    @PostMapping("new-version")
-    public String newVersionRequest(@RequestBody NewVersionRequest version, Model model){
-        Version ver = new Version(version.getAuthor(), false);
-        ver.getContent().setContent("");
-        doc.getBlocks().get(version.getBlockNumber()).addVersion(ver);
-        model.addAttribute("title", doc.getTitle());
-        model.addAttribute("blocks", doc.getBlocks());
-        return "redactor::content";
-    }
-
-    @ResponseBody
-    @PostMapping("save-version")
-    public SaveVersionResponse saveVersionRequest(@RequestBody SaveVersionRequest version){
-        doc.getBlocks()
-            .get(version.getBlockNumber())
-            .getVersions()
-            .get(version.getVersionNumber())
-            .getContent()
-            .setContent(version.getContent());
-        return new SaveVersionResponse(
-                version.getContent(),
-                Integer.toString(version.getBlockNumber()),
-                Integer.toString(version.getVersionNumber())
-        );
-    }
-
-    @ResponseBody
-    @PostMapping("save-block-title")
-    public SaveBlockTitleResponse saveBlockRequest(@RequestBody SaveBlockTitleRequest title){
-        doc.getBlocks().get(title.getBlockNumber()).setTitle(title.getContent());
-        return new SaveBlockTitleResponse(title.getContent(), Integer.toString(title.getBlockNumber()));
-    }
-
-    @ResponseBody
-    @PostMapping("save-version-author")
-    public SaveVersionAuthorResponse saveVersionAuthorRequest(@RequestBody SaveVersionAuthorRequest author){
-        doc.getBlocks()
-                .get(author.getBlockNumber())
-                .getVersions()
-                .get(author.getVersionNumber())
-                .setAuthor(author.getContent());
-        return new SaveVersionAuthorResponse(author.getContent(),
-                                             Integer.toString(author.getBlockNumber()),
-                                             Integer.toString(author.getVersionNumber()));
-    }
-
-    @ResponseBody
-    @PostMapping("save-doc-title")
-    public SaveDocResponse saveDocRequest(@RequestBody SaveDocRequest title){
-        doc.setTitle(title.content);
-        return new SaveDocResponse(title.getContent());
     }
 
 }

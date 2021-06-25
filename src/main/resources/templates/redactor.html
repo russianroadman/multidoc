@@ -36,15 +36,15 @@
 </div>
 
 <div id="new-block">
-    <div id="new-block-sign">Add new block<button id="new-block-close" onclick="hideNewBlock()">X</button></div>
+    <div id="new-block-sign">Add new <span style="background-color:#f2e6ff; padding:0.5%;">block</span><button id="new-block-close" onclick="hideNewBlock()">X</button></div>
     <input class="new-block-input" id="new-block-title" placeholder="Block title">
     <input class="new-block-input" id="new-block-author" placeholder="Author">
     <button id="new-block-submit" onclick="addNewBlock(this.parentElement)">Create new block</button>
 </div>
 
 <div id="new-version">
-    <div id="new-version-sign">Add new version<button id="new-version-close" onclick="hideNewVersion()">X</button></div>
-    <div style="display:flex">
+    <div id="new-version-sign">Add new <span style="background-color:#f2e6ff; padding:0.5%;">version</span><button id="new-version-close" onclick="hideNewVersion()">X</button></div>
+    <div style="display:flex; flex-direction:row; width:100%; justify-content:center;">
         <div>To block #</div><div id="new-version-block-number"></div>
     </div>
     <div style="display:flex">
@@ -58,10 +58,8 @@
 <div id="content" th:fragment="content">
 
     <div class="block" th:each="block : ${blocks}">
-        <div class="version-content" th:each="ver : ${block.getVersions()}" th:utext="${ver.getContent().getContent()}" hidden></div>
-        <div class="version-author" th:each="ver : ${block.getVersions()}" th:text="${ver.getAuthor()}" hidden></div>
         <div class="block-content">
-            <div class="editor"><textarea class="textarea-editor" onchange="saveVersion(this)">[[${block.getVersions().get(0).getContent().getContent()}]]</textarea></div>
+            <div class="editor"><textarea class="textarea-editor" onchange="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea></div>
         </div>
         <div class="block-controller">
             <div class="left-ctrl">

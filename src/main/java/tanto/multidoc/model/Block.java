@@ -1,18 +1,28 @@
-package tanto.multidoc;
+package tanto.multidoc.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
 public class Block {
 
-    private Version preferred;
-    private ArrayList<Version> versions = new ArrayList<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "default_sequence")
+    private Integer id;
     private String title;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Version> versions = new ArrayList<>();
 
-    public Block(String title, String author){
+    @Transient
+    private Version preferred;
+
+    public Block(){}
+
+    public Block(String title, Version version){
         this.title = title;
-        Version start = new Version(author, true);
-        versions.add(start);
-        preferred = start;
+        versions.add(version);
+        preferred = version;
     }
 
     public void addVersion(String author, boolean isPreferred){
@@ -46,7 +56,7 @@ public class Block {
         this.title = title;
     }
 
-    public ArrayList<Version> getVersions() {
+    public List<Version> getVersions() {
         return versions;
     }
 

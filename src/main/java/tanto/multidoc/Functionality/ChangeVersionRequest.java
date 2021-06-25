@@ -1,11 +1,8 @@
-package tanto.multidoc;
+package tanto.multidoc.Functionality;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-public class SaveVersionRequest {
-
-    @JsonView
-    String content;
+public class ChangeVersionRequest {
 
     @JsonView
     String blockNumber;
@@ -13,13 +10,8 @@ public class SaveVersionRequest {
     @JsonView
     String versionNumber;
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
+    @JsonView
+    String right;
 
     public int getBlockNumber() {
         int out = Integer.parseInt(blockNumber)-1;
@@ -38,5 +30,15 @@ public class SaveVersionRequest {
     public void setVersionNumber(String versionNumber) {
         this.versionNumber = versionNumber;
     }
+
+    public String getRight() {
+        return right;
+    }
+
+    public void setRight(String right) {
+        this.right = right;
+    }
+
+
 
 }
