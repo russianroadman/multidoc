@@ -56,14 +56,17 @@ public class MainController {
                                      @RequestParam String author){
 
         Version version = new Version(author, true);
-        versionRepository.save(version);
+        /* comment line below if database is dropped */
+        //versionRepository.save(version);
 
         Block block = new Block(blockTitle, version);
-        blockRepository.save(block);
+        /* comment line below if database is dropped */
+        //blockRepository.save(block);
 
         String link = Util.getUniqueLink();
         Document doc = new Document(docTitle, link);
         doc.addBlock(block);
+        /* comment line below if database is dropped */
         documentRepository.save(doc);
 
         attributes.addAttribute("link", link);
