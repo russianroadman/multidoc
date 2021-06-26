@@ -20,7 +20,7 @@ import java.util.Optional;
 @Controller
 public class MainController {
 
-    Document doc = MultidocApplication.getExample();
+    //Document doc = MultidocApplication.getExample();
 
     @Autowired
     DocumentRepository documentRepository;
@@ -38,31 +38,16 @@ public class MainController {
 
     @GetMapping("/info")
     public String infoRequest(){
-        System.out.println("jej");
         return "info";
     }
 
     @GetMapping("redactor")
     public String redactorRequest(Model model, @RequestParam String link){
-        System.out.println("kek");
         Optional<Document> doc = documentRepository.findById(link);
         model.addAttribute("title", doc.get().getTitle());
         model.addAttribute("blocks", doc.get().getBlocks());
-        /*model.addAttribute("title", doc.getTitle());
-        model.addAttribute("blocks", doc.getBlocks());*/
         return "redactor";
     }
-
-//    @GetMapping("redactor")
-//    public String redactorRequest(Model model){
-//        /*Optional<Document> doc = documentRepository.findById(link);
-//        model.addAttribute("title", doc.get().getTitle());
-//        model.addAttribute("blocks", doc.get().getBlocks());*/
-//        System.out.println("ioi");
-//        model.addAttribute("title", doc.getTitle());
-//        model.addAttribute("blocks", doc.getBlocks());
-//        return "redactor";
-//    }
 
     @PostMapping("new-multidoc")
     public String newMultidocRequest(RedirectAttributes attributes,
@@ -81,20 +66,20 @@ public class MainController {
         doc.addBlock(block);
         documentRepository.save(doc);
 
-        //model.addAttribute("title", doc.getTitle());
-        //model.addAttribute("blocks", doc.getBlocks());
-
         attributes.addAttribute("link", link);
 
         return "redirect:redactor";
     }
 
     @PostMapping("new-block")
-    public String newBlockRequest(@RequestBody NewBlockRequest block, Model model){
+    public String newBlockRequest(@RequestBody NewBlockRequest block,
+                                  Model model){
 
-        /*doc.addBlock(new Block(block.getBlockTitle(), block.getAuthor()));
+        Document doc = documentRepository.findById(block.getLink()).get();
+        doc.addBlock(new Block(block.getBlockTitle(), new Version(block.getAuthor(), false)));
+        documentRepository.save(doc);
         model.addAttribute("title", doc.getTitle());
-        model.addAttribute("blocks", doc.getBlocks());*/
+        model.addAttribute("blocks", doc.getBlocks());
 
         return "redactor::content";
     }

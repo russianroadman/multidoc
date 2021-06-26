@@ -133,7 +133,9 @@ function addNewBlock(element){
     block = {
         blockTitle : document.getElementById("new-block-title").value,
         author : document.getElementById("new-block-author").value,
+        link : window.location.search
     }
+    console.log(block.link);
     $.ajax({
         url: 'new-block',
         type: 'POST',

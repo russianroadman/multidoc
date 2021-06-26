@@ -10,6 +10,17 @@ public class NewBlockRequest {
     @JsonView
     String author;
 
+    @JsonView
+    String link;
+
+    public String getLink() {
+        return link.substring(6);
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
     public String getBlockTitle() {
         return blockTitle;
     }
