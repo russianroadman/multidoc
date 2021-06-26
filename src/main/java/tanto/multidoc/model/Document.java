@@ -36,6 +36,10 @@ public class Document {
         return blocks;
     }
 
+    public void setBlocks(List<Block> blocks) {
+        this.blocks = blocks;
+    }
+
     public String getTitle() {
         return title;
     }

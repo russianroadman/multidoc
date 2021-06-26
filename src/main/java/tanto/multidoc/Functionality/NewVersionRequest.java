@@ -10,6 +10,13 @@ public class NewVersionRequest {
     @JsonView
     String blockNumber;
 
+    @JsonView
+    String link;
+
+    public String getLink() {
+        return link.substring(6);
+    }
+
     public String getAuthor() {
         return author;
     }

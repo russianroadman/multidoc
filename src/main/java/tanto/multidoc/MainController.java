@@ -20,14 +20,10 @@ import java.util.Optional;
 @Controller
 public class MainController {
 
-    //Document doc = MultidocApplication.getExample();
-
     @Autowired
     DocumentRepository documentRepository;
-
     @Autowired
     BlockRepository blockRepository;
-
     @Autowired
     VersionRepository versionRepository;
 
@@ -56,17 +52,14 @@ public class MainController {
                                      @RequestParam String author){
 
         Version version = new Version(author, true);
-        /* comment line below if database is dropped */
-        //versionRepository.save(version);
 
         Block block = new Block(blockTitle, version);
-        /* comment line below if database is dropped */
-        //blockRepository.save(block);
 
         String link = Util.getUniqueLink();
         Document doc = new Document(docTitle, link);
         doc.addBlock(block);
-        /* comment line below if database is dropped */
+
+        /* comment line below if database has no tables */
         documentRepository.save(doc);
 
         attributes.addAttribute("link", link);
@@ -81,6 +74,7 @@ public class MainController {
         Document doc = documentRepository.findById(block.getLink()).get();
         doc.addBlock(new Block(block.getBlockTitle(), new Version(block.getAuthor(), false)));
         documentRepository.save(doc);
+
         model.addAttribute("title", doc.getTitle());
         model.addAttribute("blocks", doc.getBlocks());
 
@@ -92,9 +86,14 @@ public class MainController {
         Version ver = new Version(version.getAuthor(), false);
         ver.setContent("");
 
-        /*doc.getBlocks().get(version.getBlockNumber()).addVersion(ver);
+        Document doc = documentRepository.findById(version.getLink()).get();
+        doc.getBlocks().get(version.getBlockNumber()).addVersion(ver);
+        documentRepository.save(doc);
+
         model.addAttribute("title", doc.getTitle());
-        model.addAttribute("blocks", doc.getBlocks());*/
+        model.addAttribute("blocks", doc.getBlocks());
+
+
 
         return "redactor::content";
     }
@@ -103,11 +102,15 @@ public class MainController {
     @PostMapping("save-version")
     public SaveVersionResponse saveVersionRequest(@RequestBody SaveVersionRequest version){
 
-        /*doc.getBlocks()
+        Document doc = documentRepository.findById(version.getLink()).get();
+
+        doc.getBlocks()
             .get(version.getBlockNumber())
             .getVersions()
             .get(version.getVersionNumber())
-            .setContent(version.getContent());*/
+            .setContent(version.getContent());
+
+        documentRepository.save(doc);
 
         return new SaveVersionResponse(
                 version.getContent(),
@@ -119,18 +122,22 @@ public class MainController {
     @ResponseBody
     @PostMapping("save-block-title")
     public SaveBlockTitleResponse saveBlockRequest(@RequestBody SaveBlockTitleRequest title){
-        //doc.getBlocks().get(title.getBlockNumber()).setTitle(title.getContent());
+        Document doc = documentRepository.findById(title.getLink()).get();
+        doc.getBlocks().get(title.getBlockNumber()).setTitle(title.getContent());
+        documentRepository.save(doc);
         return new SaveBlockTitleResponse(title.getContent(), Integer.toString(title.getBlockNumber()));
     }
 
     @ResponseBody
     @PostMapping("save-version-author")
     public SaveVersionAuthorResponse saveVersionAuthorRequest(@RequestBody SaveVersionAuthorRequest author){
-        /*doc.getBlocks()
+        Document doc = documentRepository.findById(author.getLink()).get();
+        doc.getBlocks()
                 .get(author.getBlockNumber())
                 .getVersions()
                 .get(author.getVersionNumber())
-                .setAuthor(author.getContent());*/
+                .setAuthor(author.getContent());
+        documentRepository.save(doc);
         return new SaveVersionAuthorResponse(author.getContent(),
                                              Integer.toString(author.getBlockNumber()),
                                              Integer.toString(author.getVersionNumber()));
@@ -139,17 +146,21 @@ public class MainController {
     @ResponseBody
     @PostMapping("save-doc-title")
     public SaveDocResponse saveDocRequest(@RequestBody SaveDocRequest title){
-        //doc.setTitle(title.getContent());
+        Document doc = documentRepository.findById(title.getLink()).get();
+        doc.setTitle(title.getContent());
+        documentRepository.save(doc);
         return new SaveDocResponse(title.getContent());
     }
 
     @ResponseBody
     @PostMapping("change-version")
     public ChangeVersionResponse changeVersionRequest(@RequestBody ChangeVersionRequest loc){
-        String out = null;
-        String author = null;
+        String out;
+        String author;
 
-        /*if (loc.getRight().equals("true")){
+        Document doc = documentRepository.findById(loc.getLink()).get();
+
+        if (loc.getRight().equals("true")){
             out = doc.getBlocks()
                 .get(loc.getBlockNumber())
                 .getVersions()
@@ -171,7 +182,7 @@ public class MainController {
                     .getVersions()
                     .get(loc.getVersionNumber()-1)
                     .getAuthor();
-        }*/
+        }
 
         return new ChangeVersionResponse(out, author);
     }

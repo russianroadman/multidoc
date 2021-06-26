@@ -40,7 +40,8 @@ function hideNewVersion(){
 
 function saveDocTitle(element){
     title = {
-        content : element.value
+        content : element.value,
+        link : window.location.search
     }
     $.ajax({
         type : "POST",
@@ -62,7 +63,8 @@ function saveBlockTitle(element){
     var number = element.parentElement.getElementsByClassName("block-number")[0].innerHTML;
     title = {
         content : element.value,
-        blockNumber : number
+        blockNumber : number,
+        link : window.location.search
     }
     $.ajax({
         type : "POST",
@@ -86,7 +88,8 @@ function saveVersionAuthor(element){
     author = {
         content : element.value,
         blockNumber : bNumber,
-        versionNumber : vNumber
+        versionNumber : vNumber,
+        link : window.location.search
     }
     $.ajax({
         type : "POST",
@@ -110,7 +113,8 @@ function saveVersion(element){
     version = {
         content : element.value,
         blockNumber : bNumber,
-        versionNumber : vNumber
+        versionNumber : vNumber,
+        link : window.location.search
     }
     $.ajax({
         type : "POST",
@@ -133,6 +137,7 @@ function addNewBlock(element){
     block = {
         blockTitle : document.getElementById("new-block-title").value,
         author : document.getElementById("new-block-author").value,
+        link : window.location.search,
         link : window.location.search
     }
     console.log(block.link);
@@ -159,12 +164,14 @@ function addNewVersion(element){
         .innerHTML);
     version = {
         author : document.getElementById("new-version-author").value,
-        blockNumber : bNum
+        blockNumber : bNum,
+        link : window.location.search
     }
     loc = {
         blockNumber : bNum,
         versionNumber : vNum,
-        right : "true"
+        right : "true",
+        link : window.location.search
     }
     $.ajax({
         url: 'new-version',
@@ -212,7 +219,8 @@ function changeVersion(element, right){
         loc = {
             blockNumber : currentBlockNumber,
             versionNumber : currentVersionNumber,
-            right : right
+            right : right,
+            link : window.location.search
         }
         console.log(loc);
         $.ajax({

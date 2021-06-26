@@ -13,6 +13,13 @@ public class SaveVersionAuthorRequest {
     @JsonView
     String versionNumber;
 
+    @JsonView
+    String link;
+
+    public String getLink() {
+        return link.substring(6);
+    }
+
     public String getContent() {
         return content;
     }

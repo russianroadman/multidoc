@@ -13,6 +13,13 @@ public class ChangeVersionRequest {
     @JsonView
     String right;
 
+    @JsonView
+    String link;
+
+    public String getLink() {
+        return link.substring(6);
+    }
+
     public int getBlockNumber() {
         int out = Integer.parseInt(blockNumber)-1;
         return out;
