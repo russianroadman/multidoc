@@ -56,15 +56,15 @@ public class MainController {
                                      @RequestParam String author){
 
         Version version = new Version(author, true);
-        //versionRepository.save(version);
+        versionRepository.save(version);
 
         Block block = new Block(blockTitle, version);
-        //blockRepository.save(block);
+        blockRepository.save(block);
 
         String link = Util.getUniqueLink();
         Document doc = new Document(docTitle, link);
         doc.addBlock(block);
-        //documentRepository.save(doc);
+        documentRepository.save(doc);
 
         attributes.addAttribute("link", link);
 
