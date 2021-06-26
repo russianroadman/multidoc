@@ -1,7 +1,7 @@
 # multidoc
 block-based doc with author variations for each block
 
-#application.properties
+# application.properties
 uncomment "localhost" and make changes to values according to your own database
 
 # Main controller
