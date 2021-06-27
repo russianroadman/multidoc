@@ -12,6 +12,7 @@ public class Block {
     private Integer id;
     private String title;
     @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("id")
     private List<Version> versions = new ArrayList<>();
 
     @Transient

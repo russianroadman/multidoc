@@ -3,6 +3,29 @@ window.onload = function() {
     autosizeTextAreas();
 };
 
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
 function autosizeTextAreas(){
     var x = document.getElementsByClassName("textarea-editor")
     for (const item of x){
@@ -30,6 +53,18 @@ function hideNewVersion(){
     document.getElementById('new-version').style.visibility = "hidden";
 }
 
+function share(){
+    document.getElementById('share-input-wrapper').style.visibility = "visible";
+    document.getElementById('share-input').value = window.location;
+}
+
+function copyToClipboard(){
+    navigator.clipboard.writeText(document.getElementById('share-input').value);
+}
+
+function closeShare(){
+    document.getElementById('share-input-wrapper').style.visibility = "hidden";
+}
 
 
 /****************************************************************/
@@ -217,8 +252,8 @@ function changeVersion(element, right){
     if ( (currentVersionNumber > 1 && right == false) || (currentVersionNumber < maxVersion && right == true) ){
         if (right) { right = "true" } else { right = "false" }
         loc = {
-            blockNumber : currentBlockNumber,
-            versionNumber : currentVersionNumber,
+            blockNumber : currentBlockNumber.toString(),
+            versionNumber : currentVersionNumber.toString(),
             right : right,
             link : window.location.search
         }

@@ -33,4 +33,16 @@ public class Util {
         return example;
     }
 
+    public static String stringifyDocument(Document d){
+        String out = d.getTitle() + ":\n";
+        for (Block b : d.getBlocks()){
+            out += "  block " + b.getTitle() + ":\n";
+            for (Version v : b.getVersions()){
+                out += "    " + v.getAuthor() + " : " + v.getContent() + "\n";
+            }
+            out+="\n";
+        }
+        return out;
+    }
+
 }

@@ -61,6 +61,7 @@ body{
 }
 
 #link-button, #share-button{
+  color:white;
   height: 4vh;
   width: 4vh;
   border-radius: 999px;
@@ -77,6 +78,60 @@ body{
 #share-button{
   background: #7ACC7D;
   margin-left:0.5vw;
+}
+
+#share-input-wrapper{
+  visibility:hidden;
+  border-radius:999px;
+  box-sizing:border-box;
+  border: 1px solid gray;
+  background: white;
+  position:absolute;
+  width: 50%;
+  height:5vh;
+  top:10vh;
+  left:5vw;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+#share-input{
+  margin-left: 1vw;
+  padding-left:1vw;
+  box-sizing:border-box;
+  width: 100%;
+  border: 1px solid #EFEFEF;
+  border-radius:999px;
+  outline:none;
+}
+
+#share-input-close, #share-input-copy{
+   padding-left:1vw;
+   padding-right:1vw;
+   padding-top:0.1vh;
+   padding-bottom:0.2vh;
+   box-sizing:border-box;
+   color: white;
+   border-radius:999px;
+   display:flex;
+   justify-content:center;
+   align-items:center;
+}
+
+#share-input-close{
+    margin-right: 1vw;
+    background: #FF9E9E;
+}
+
+#share-input-copy{
+    background: #D59EFF;
+    margin-right: 1vw;
+    margin-left: 1vw;
+}
+
+#share-input-copy:focus{
+    background:#A3F08E;
 }
 
 #mdoc-title{

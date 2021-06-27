@@ -39,9 +39,9 @@ public class MainController {
 
     @GetMapping("redactor")
     public String redactorRequest(Model model, @RequestParam String link){
-        Optional<Document> doc = documentRepository.findById(link);
-        model.addAttribute("title", doc.get().getTitle());
-        model.addAttribute("blocks", doc.get().getBlocks());
+        Document doc = documentRepository.findById(link).get();
+        model.addAttribute("title", doc.getTitle());
+        model.addAttribute("blocks", doc.getBlocks());
         return "redactor";
     }
 
@@ -92,8 +92,6 @@ public class MainController {
 
         model.addAttribute("title", doc.getTitle());
         model.addAttribute("blocks", doc.getBlocks());
-
-
 
         return "redactor::content";
     }
@@ -155,6 +153,7 @@ public class MainController {
     @ResponseBody
     @PostMapping("change-version")
     public ChangeVersionResponse changeVersionRequest(@RequestBody ChangeVersionRequest loc){
+
         String out;
         String author;
 
