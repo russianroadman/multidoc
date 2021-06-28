@@ -11,6 +11,7 @@ public class Document {
     private String link;
     private String title;
     @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("id")
     private List<Block> blocks = new ArrayList<>();
 
     public Document(String title, String link){
