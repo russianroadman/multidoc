@@ -4,6 +4,7 @@ import tanto.multidoc.model.Block;
 import tanto.multidoc.model.Document;
 import tanto.multidoc.model.Version;
 
+import java.util.List;
 import java.util.UUID;
 
 public class Util {
@@ -18,7 +19,7 @@ public class Util {
 
         Version ver11 = new Version("Sample Author", true);
         Version ver12 = new Version("Different Author", false);
-        Version ver21 = new Version("Sample Author", true);
+        Version ver21 = new Version("Different Author", true);
 
         Block block1 = new Block("Sample block", ver11);
         block1.addVersion(ver12);
@@ -31,6 +32,7 @@ public class Util {
         example.addBlock(block2);
 
         return example;
+
     }
 
     public static String stringifyDocument(Document d){
@@ -41,6 +43,14 @@ public class Util {
                 out += "    " + v.getAuthor() + " : " + v.getContent() + "\n";
             }
             out+="\n";
+        }
+        return out;
+    }
+
+    public static String getFinalDocument(List<Version> versions){
+        String out = "";
+        for (Version v : versions){
+            out += v.getContent() + "\n";
         }
         return out;
     }

@@ -58,7 +58,25 @@
 
     <div class="block" th:each="block : ${blocks}">
         <div class="block-content">
-            <div class="editor"><textarea class="textarea-editor" onchange="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea></div>
+            <div class="editor">
+                <div th:switch="${block.getVersions().get(0).isPreferred()}" class="editor-bar">
+                    <button th:case="true" class="editor-star-version" onclick="starVersion(this)">
+                        <svg fill="#fff491" class="editor-star-version-svg" xmlns="http://www.w3.org/2000/svg" width="1.5vw" height="1.5vw" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    </button>
+                    <button th:case="false" class="editor-star-version" onclick="starVersion(this)">
+                        <svg fill="#efefef" class="editor-star-version-svg" xmlns="http://www.w3.org/2000/svg" width="1.5vw" height="1.5vw" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    </button>
+                    <button class="editor-actions" onclick="openContextActions(this)">
+                        •••
+                    </button>
+                </div>
+                <div class="context-actions">
+                    <button class="context-actions-button" onclick="deleteBlock(this)">delete block</button>
+                    <button class="context-actions-button" onclick="deleteVersion(this)" style="border-top:1px solid lightgray; border-bottom:1px solid lightgray;">delete version</button>
+                    <button class="context-actions-button" onclick="closeEditorContextMenu(this)">close</button>
+                </div>
+                <textarea class="textarea-editor" onchange="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea>
+            </div>
         </div>
         <div class="block-controller">
             <div class="left-ctrl">

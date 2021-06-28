@@ -10,9 +10,21 @@ public class ChangeVersionResponse {
     @JsonView
     String author;
 
-    public ChangeVersionResponse(String content, String author) {
+    @JsonView
+    boolean starred;
+
+    public ChangeVersionResponse(String content, String author, boolean starred) {
         this.content = content;
         this.author = author;
+        this.starred = starred;
+    }
+
+    public boolean getStarred() {
+        return starred;
+    }
+
+    public void setStarred(boolean starred) {
+        this.starred = starred;
     }
 
     public String getAuthor() {

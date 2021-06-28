@@ -9,12 +9,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tanto.multidoc.Functionality.*;
 import tanto.multidoc.model.Block;
 import tanto.multidoc.model.Document;
+import tanto.multidoc.model.ModelUtil;
 import tanto.multidoc.model.Version;
 import tanto.multidoc.repos.BlockRepository;
 import tanto.multidoc.repos.DocumentRepository;
 import tanto.multidoc.repos.VersionRepository;
 import tanto.multidoc.util.Util;
 
+import javax.print.Doc;
 import java.util.Optional;
 
 @Controller
@@ -67,12 +69,26 @@ public class MainController {
         return "redirect:redactor";
     }
 
+    @GetMapping("new-multidoc-default")
+    public String newMultidocRequest(RedirectAttributes attributes){
+
+        String link = Util.getUniqueLink();
+        Document doc = Util.getExampleDocument(link);
+
+        /* comment line below if database has no tables */
+        documentRepository.save(doc);
+
+        attributes.addAttribute("link", link);
+
+        return "redirect:redactor";
+    }
+
     @PostMapping("new-block")
     public String newBlockRequest(@RequestBody NewBlockRequest block,
                                   Model model){
 
         Document doc = documentRepository.findById(block.getLink()).get();
-        doc.addBlock(new Block(block.getBlockTitle(), new Version(block.getAuthor(), false)));
+        doc.addBlock(new Block(block.getBlockTitle(), new Version(block.getAuthor(), true)));
         documentRepository.save(doc);
 
         model.addAttribute("title", doc.getTitle());
@@ -84,7 +100,6 @@ public class MainController {
     @PostMapping("new-version")
     public String newVersionRequest(@RequestBody NewVersionRequest version, Model model){
         Version ver = new Version(version.getAuthor(), false);
-        ver.setContent("");
 
         Document doc = documentRepository.findById(version.getLink()).get();
         doc.getBlocks().get(version.getBlockNumber()).addVersion(ver);
@@ -158,32 +173,79 @@ public class MainController {
         String author;
 
         Document doc = documentRepository.findById(loc.getLink()).get();
+        Version target;
 
         if (loc.getRight().equals("true")){
-            out = doc.getBlocks()
+
+            target = doc.getBlocks()
                 .get(loc.getBlockNumber())
                 .getVersions()
-                .get(loc.getVersionNumber()+1)
-                .getContent();
-            author = doc.getBlocks()
-                    .get(loc.getBlockNumber())
-                    .getVersions()
-                    .get(loc.getVersionNumber()+1)
-                    .getAuthor();
+                .get(loc.getVersionNumber()+1);
+
+            out = target.getContent();
+            author = target.getAuthor();
+
         } else {
-            out = doc.getBlocks()
-                .get(loc.getBlockNumber())
-                .getVersions()
-                .get(loc.getVersionNumber()-1)
-                .getContent();
-            author = doc.getBlocks()
+            target = doc.getBlocks()
                     .get(loc.getBlockNumber())
                     .getVersions()
-                    .get(loc.getVersionNumber()-1)
-                    .getAuthor();
+                    .get(loc.getVersionNumber()-1);
+
+            out = target.getContent();
+            author = target.getAuthor();
         }
 
-        return new ChangeVersionResponse(out, author);
+        return new ChangeVersionResponse(out, author, target.isPreferred());
+    }
+
+    @PostMapping("delete-block")
+    public String deleteBlockRequest(@RequestBody DeleteBlockRequest block, Model model){
+
+        Document doc = documentRepository.findById(block.getLink()).get();
+        doc.getBlocks().remove(block.getBlockNumber());
+        documentRepository.save(doc);
+
+        model.addAttribute("title", doc.getTitle());
+        model.addAttribute("blocks", doc.getBlocks());
+
+        return "redactor::content";
+
+    }
+
+    @PostMapping("delete-version")
+    public String deleteVersionRequest(@RequestBody DeleteVersionRequest version, Model model){
+
+        Document doc = documentRepository
+                .findById(version.getLink())
+                .get();
+
+        doc
+            .getBlocks()
+            .get(version.getBlockNumber())
+            .deleteVersion(version.getVersionNumber());
+
+        documentRepository.save(doc);
+
+        model.addAttribute("title", doc.getTitle());
+        model.addAttribute("blocks", doc.getBlocks());
+
+        return "redactor::content";
+
+    }
+
+    @ResponseBody
+    @PostMapping("star-version")
+    public void starVersionRequest(@RequestBody StarVersionRequest version){
+
+        Document doc = documentRepository
+                .findById(version.getLink())
+                .get();
+
+        doc.getBlocks().get(0).getVersions().get(0).isPreferred();
+
+        doc.getBlocks().get(version.getBlockNumber()).setPreferred(version.getVersionNumber());
+        documentRepository.save(doc);
+
     }
 
 }

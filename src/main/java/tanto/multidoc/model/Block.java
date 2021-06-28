@@ -15,22 +15,17 @@ public class Block {
     @OrderBy("id")
     private List<Version> versions = new ArrayList<>();
 
-    @Transient
-    private Version preferred;
-
     public Block(){}
 
     public Block(String title, Version version){
         this.title = title;
         versions.add(version);
-        preferred = version;
     }
 
     public void addVersion(String author, boolean isPreferred){
         Version version = new Version(author, isPreferred);
         if (isPreferred){
-            preferred.noMorePreferred();
-            preferred = version;
+            getPreferred().noMorePreferred();
         }
         versions.add(version);
     }
@@ -43,10 +38,14 @@ public class Block {
         if (versions.get(index).isPreferred()){
             versions.remove(index);
             versions.get(0).preferred();
-            preferred = versions.get(0);
         } else {
             versions.remove(index);
         }
+    }
+
+    public void setPreferred(int index){
+        getPreferred().noMorePreferred();
+        getVersions().get(index).preferred();
     }
 
     public String getTitle() {
@@ -62,6 +61,14 @@ public class Block {
     }
 
     public Version getPreferred(){
+        Version preferred = null;
+        List<Version> versions = getVersions();
+        for (Version v : versions){
+            if (v.isPreferred()){
+                preferred = v;
+                break;
+            }
+        }
         return preferred;
     }
 

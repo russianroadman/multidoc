@@ -86,11 +86,12 @@ body{
   box-sizing:border-box;
   border: 1px solid gray;
   background: white;
-  position:absolute;
-  width: 50%;
+  position:fixed;
+  width: 50vw;
   height:5vh;
-  top:10vh;
-  left:5vw;
+  top:20vh;
+  left:25vw;
+  box-shadow: 0 0 1vw 1vw rgba(0, 0, 0, 0.1);
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -111,12 +112,24 @@ body{
    padding-right:1vw;
    padding-top:0.1vh;
    padding-bottom:0.2vh;
-   box-sizing:border-box;
+   box-sizing: border-box;
    color: white;
    border-radius:999px;
    display:flex;
    justify-content:center;
    align-items:center;
+}
+
+#share-input-close:hover {
+    background: #8a5454;
+}
+
+#share-input-copy:hover{
+    background: #715487;
+}
+
+#link-button:hover{
+    background: #507691;
 }
 
 #share-input-close{
@@ -227,10 +240,62 @@ body{
   border-radius: 2vw;
   display:flex;
   flex-direction:column;
+  border: 1px solid transparent;
+}
+
+.block:focus-within{
+    border: 1px solid gray;
 }
 
 .block-content{
   width:100%;
+}
+
+.editor{
+    position:relative;
+}
+
+.context-actions{
+    visibility: hidden;
+    position:absolute;
+    right:2vw;
+    top:2vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    border:1px solid lightgray;
+    background:white;
+    border-radius:1vw;
+}
+
+.context-actions-button{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:0.5vw;
+}
+
+.editor-bar{
+    position:absolute;
+    top:0.5vh;
+    right:2vw;
+    display:flex;
+    flex-direction:row;
+}
+
+.editor-actions{
+    font-size:150%;
+    color:lightgray;
+    outline:none;
+    border:none;
+}
+
+.editor-star-version{
+    margin-right:1vw;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 .textarea-editor{
@@ -346,7 +411,7 @@ body{
 }
 
 #add-block-button{
-    margin-bottom: 1%;
+    margin-bottom: 30vh;
     display:flex;
     padding-top:0.5vh;
     padding-bottom:0.5vh;

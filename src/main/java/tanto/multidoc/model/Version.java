@@ -17,7 +17,7 @@ public class Version {
 
     public Version(String author, boolean isPreferred){
         this.author = author;
-        this.isPreferred = true;
+        this.isPreferred = isPreferred;
     }
 
     public String getAuthor() {

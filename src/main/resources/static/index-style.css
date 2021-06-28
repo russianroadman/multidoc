@@ -64,9 +64,9 @@ body {
     display:flex;
     justify-content:center;
     align-items:center;
-    margin:2vh;
+    margin:1vh;
     width:25vw;
-    height:3vw;
+    height:2vw;
     outline:none;
     border: 1px solid lightgray;
     background:white;
@@ -78,6 +78,12 @@ body {
 
 .new-doc-input{
     padding-left:1vw;
+}
+
+#create-new{
+    background:#9559FF;
+    color:white;
+    border: none;
 }
 
 .hidden-link{

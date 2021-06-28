@@ -66,12 +66,17 @@ function closeShare(){
     document.getElementById('share-input-wrapper').style.visibility = "hidden";
 }
 
+function openContextActions(element){
+    element.parentElement.parentElement.getElementsByClassName('context-actions')[0].style.visibility = "visible";
+}
+
+function closeEditorContextMenu(element){
+    element.parentElement.parentElement.getElementsByClassName('context-actions')[0].style.visibility = "hidden";
+}
 
 /****************************************************************/
 /***************************** AJAX *****************************/
 /****************************************************************/
-
-/*                  changes in a document model                 */
 
 function saveDocTitle(element){
     title = {
@@ -172,10 +177,8 @@ function addNewBlock(element){
     block = {
         blockTitle : document.getElementById("new-block-title").value,
         author : document.getElementById("new-block-author").value,
-        link : window.location.search,
         link : window.location.search
     }
-    console.log(block.link);
     $.ajax({
         url: 'new-block',
         type: 'POST',
@@ -231,6 +234,9 @@ function addNewVersion(element){
                     text.style.height = "auto";
                     text.style.height = text.scrollHeight+'px';
                     element.getElementsByClassName("block-version")[0].innerHTML = vNum+1;
+                    element
+                        .getElementsByClassName("editor-star-version-svg")[0]
+                        .style.fill = '#efefef'
                     autosizeTextAreas();
                 },
                 error : function(e) {
@@ -281,6 +287,25 @@ function changeVersion(element, right){
                     element.parentElement.parentElement.parentElement
                         .getElementsByClassName("block-version")[0].innerHTML = currentVersionNumber-1;
                 }
+
+                if (data.starred){
+                    element
+                        .parentElement
+                        .parentElement
+                        .parentElement
+                        .getElementsByClassName("editor-star-version-svg")[0]
+                        .style.fill = '#fff491'
+                } else {
+                    element
+                        .parentElement
+                        .parentElement
+                        .parentElement
+                        .getElementsByClassName("editor-star-version-svg")[0]
+                        .style.fill = '#efefef'
+                }
+
+
+
                 autosizeTextAreas();
             },
             error : function(e) {
@@ -288,6 +313,75 @@ function changeVersion(element, right){
             }
         })
     }
+}
+
+function deleteBlock(element){
+    element.parentElement.style.visibility = "hidden";
+    var number = element.parentElement.parentElement.parentElement.parentElement.getElementsByClassName("block-number")[0].innerHTML;
+    block = {
+        blockNumber : number,
+        link : window.location.search
+    }
+    $.ajax({
+        url: 'delete-block',
+        type: 'POST',
+        contentType : "application/json",
+        data : JSON.stringify(block),
+        success: function (data) {
+            document.getElementById("content").outerHTML = data;
+            autosizeTextAreas();
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
+    })
+}
+
+function deleteVersion(element){
+    element.parentElement.style.visibility = "hidden";
+    var bNumber = element.parentElement.parentElement.parentElement.parentElement.getElementsByClassName("block-number")[0].innerHTML;
+    var vNumber = element.parentElement.parentElement.parentElement.parentElement.getElementsByClassName("block-version")[0].innerHTML;
+    version = {
+        blockNumber : bNumber,
+        versionNumber : vNumber,
+        link : window.location.search
+    }
+    $.ajax({
+        url: 'delete-version',
+        type: 'POST',
+        contentType : "application/json",
+        data : JSON.stringify(version),
+        success: function (data) {
+            document.getElementById("content").outerHTML = data;
+            autosizeTextAreas();
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
+    })
+}
+
+function starVersion(element){
+    element.getElementsByClassName("editor-star-version-svg")[0].style.fill = '#fff491';
+    var bNumber = element.parentElement.parentElement.parentElement.parentElement.getElementsByClassName("block-number")[0].innerHTML;
+    var vNumber = element.parentElement.parentElement.parentElement.parentElement.getElementsByClassName("block-version")[0].innerHTML;
+    version = {
+        blockNumber : bNumber,
+        versionNumber : vNumber,
+        link : window.location.search
+    }
+    $.ajax({
+        url: 'star-version',
+        type: 'POST',
+        contentType : "application/json",
+        data : JSON.stringify(version),
+        success: function (data) {
+            console.log('SUCCESS');
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
+    })
 }
 
 
