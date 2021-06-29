@@ -95,7 +95,7 @@
             <div class="right-ctrl">
                 <input class="block-author" th:value="${block.getVersions().get(0).getAuthor()}" onchange="saveVersionAuthor(this)">
                 <button class="block-add-version" onclick="showNewVersion(this)">
-                    +
+                    <svg fill="gray" xmlns="http://www.w3.org/2000/svg" width="2vh" height="2vh" viewBox="0 0 24 24"><path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z"/></svg>
                 </button>
             </div>
         </div>
@@ -104,7 +104,11 @@
 </div>
 
 
-<center><div id="add-block-button" onclick="showNewBlock()">+</div></center>
+<center>
+    <button id="add-block-button" onclick="showNewBlock()">
+        <svg fill="gray" xmlns="http://www.w3.org/2000/svg" width="2vw" height="2vw" viewBox="0 0 24 24"><path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z"/></svg>
+    </button>
+</center>
 
 
 <script src="redactor.js"></script>

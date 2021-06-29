@@ -11,7 +11,7 @@ public class Block {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "default_sequence")
     private Integer id;
     private String title;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id")
     private List<Version> versions = new ArrayList<>();
 

@@ -10,7 +10,7 @@ public class Document {
     @Id
     private String link;
     private String title;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id")
     private List<Block> blocks = new ArrayList<>();
 
