@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width">
     <title>MDOC</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" th:href="@{../static/fav.png}">
     <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/decoupled-document/ckeditor.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
@@ -85,11 +86,11 @@
             </div>
             <div class="middle-ctrl">
                 <button class="block-left" onclick="changeVersion(this, false)">
-                    <
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="lightgrey" width="2vh" height="2vh" viewBox="0 0 24 24"><path d="M3 12l18-12v24z"/></svg>
                 </button>
                 <div class="block-version">1</div>/<div class="block-version block-max-version" th:text="${block.getVersions().size()}"></div>
                 <button class="block-right" onclick="changeVersion(this, true)">
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="lightgrey" width="2vh" height="2vh" viewBox="0 0 24 24"><path d="M21 12l-18 12v-24z"/></svg>
                 </button>
             </div>
             <div class="right-ctrl">
@@ -106,7 +107,14 @@
 
 <center>
     <button id="add-block-button" onclick="showNewBlock()">
-        <svg fill="gray" xmlns="http://www.w3.org/2000/svg" width="2vw" height="2vw" viewBox="0 0 24 24"><path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z"/></svg>
+        <div>
+            <div style="height:15px; width:15px; border-radius:100% 0 0 0; border-right:1px solid grey; border-bottom:1px solid grey;"></div>
+            <div style="height:15px; width:15px; border-radius:0 0 0 100%; border-right:1px solid grey; border-top:1px solid grey;"></div>
+        </div>
+        <div>
+            <div style="height:15px; width:15px; border-radius:0 100% 0 0; border-left:1px solid grey; border-bottom:1px solid grey;"></div>
+            <div style="height:15px; width:15px; border-radius:0 0 100% 0; border-left:1px solid grey; border-top:1px solid grey;"></div>
+        </div>
     </button>
 </center>
 

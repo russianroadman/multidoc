@@ -245,7 +245,7 @@ body{
 
 .block:focus-within{
     /*border: 1px solid gray;*/
-    box-shadow: 0 0 0 1pt lightgray;
+    box-shadow: 0 0 0 1pt gray;
 }
 
 .block-content{
@@ -367,7 +367,6 @@ body{
 }
 
 .block-left{
-  background: #EFEFEF;
   border-radius: 999px;
   margin:1%;
   padding-left:1%;
@@ -376,7 +375,6 @@ body{
 }
 
 .block-right{
-  background: #EFEFEF;
   border-radius: 999px;
   margin:1%;
   padding-left:1%;
@@ -410,12 +408,16 @@ body{
 }
 
 #add-block-button{
+    font-family: consolas;
+    font-size: 300%;
     margin-bottom: 30vh;
+    color:black;
     background:white;
-    border-radius:999px;
-    width: 4vw;
-    height: 4vw;
+    border-radius:50%;
+    height:50px;
+    width:50px;
     display:flex;
+    flex-direction:row;
     align-items:center;
     justify-content:center;
 }
