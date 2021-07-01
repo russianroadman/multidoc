@@ -13,23 +13,17 @@ import tanto.multidoc.Functionality.*;
 import tanto.multidoc.model.Block;
 import tanto.multidoc.model.Document;
 import tanto.multidoc.model.Version;
-import tanto.multidoc.repos.BlockRepository;
 import tanto.multidoc.repos.DocumentRepository;
-import tanto.multidoc.repos.VersionRepository;
 import tanto.multidoc.util.Util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Controller
 public class MainController {
 
     @Autowired
     DocumentRepository documentRepository;
-    @Autowired
-    BlockRepository blockRepository;
-    @Autowired
-    VersionRepository versionRepository;
 
     @GetMapping("/")
     public String mainPageRequest(){
@@ -264,7 +258,7 @@ public class MainController {
 
     @ResponseBody
     @GetMapping("download-document/{link}")
-    public DownloadPdfResponse downloadDocumentRequest(@PathVariable String link) throws Exception{
+    public DownloadPdfResponse downloadDocumentRequest(@PathVariable String link) throws DocumentException, IOException {
 
         Document doc = documentRepository.findById(link).get();
 
