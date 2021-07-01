@@ -34,7 +34,7 @@ function loadLinksFromCookies(){
     if (x.length > 0){
         html = '';
         for (var i = 0; i < x.length; i++){
-            name = getNameByLink(x[i].substring(36));
+            name = getNameByLink(x[i].substring(x[i].indexOf('=')+1));
             if (name != null){
                 html += '<a class="menu-list-link menu-list-item" href="'+ x[i] +'">'+name+'</a>';
             }
