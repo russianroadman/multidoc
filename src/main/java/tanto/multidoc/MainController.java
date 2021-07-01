@@ -3,7 +3,6 @@ package tanto.multidoc;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.StandardDecryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,17 +12,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tanto.multidoc.Functionality.*;
 import tanto.multidoc.model.Block;
 import tanto.multidoc.model.Document;
-import tanto.multidoc.model.ModelUtil;
 import tanto.multidoc.model.Version;
 import tanto.multidoc.repos.BlockRepository;
 import tanto.multidoc.repos.DocumentRepository;
 import tanto.multidoc.repos.VersionRepository;
 import tanto.multidoc.util.Util;
 
-import javax.print.Doc;
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 @Controller
 public class MainController {
@@ -266,13 +262,18 @@ public class MainController {
         return "redirect:/";
     }
 
+    @ResponseBody
     @GetMapping("download-document/{link}")
-    public String downloadDocumentRequest(@PathVariable String link) throws Exception{
+    public DownloadPdfResponse downloadDocumentRequest(@PathVariable String link) throws Exception{
 
         Document doc = documentRepository.findById(link).get();
 
         com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-        PdfWriter.getInstance(document, new FileOutputStream("iTextHelloWorld.pdf"));
+
+        FileOutputStream fileStream = new FileOutputStream("iTextHelloWorld.pdf");
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        PdfWriter.getInstance(document, stream);
 
         BaseFont bf=BaseFont.createFont("arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
@@ -307,7 +308,7 @@ public class MainController {
 
         document.close();
 
-        return "redirect:/";
+        return new DownloadPdfResponse(doc.getTitle(), stream.toByteArray());
 
     }
 

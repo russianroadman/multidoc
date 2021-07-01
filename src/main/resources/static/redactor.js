@@ -9,7 +9,8 @@ window.onload = function() {
 
 function setDownloadDocWrapper(){
     var link = window.location.search.toString().substring(6);
-    document.getElementById("download-document-wrapper").innerHTML = '<form action="download-document/'+link+'" method="get" style="display:flex;flex-direction: column;align-items: stretch;"><button style="background:#82b2ff; color:white" class="menu-list-button menu-list-item">Download .pdf</button></form>';
+    document.getElementById("download-document-wrapper").innerHTML = '<button style="background:#82b2ff; color:white" class="menu-list-button menu-list-item" onclick="downloadDocument()">Download .pdf</button>'
+    //'<form action="download-document/'+link+'" method="get" style="display:flex;flex-direction: column;align-items: stretch;"><button style="background:#82b2ff; color:white" class="menu-list-button menu-list-item">Download .pdf</button></form>';
 }
 
 function setDocumentWrapper(){
@@ -433,3 +434,38 @@ function getNameByLink(src){
     })
     return out;
 }
+
+function downloadDocument(){
+    var request = 'download-document/'+window.location.search.toString().substring(6);
+    $.ajax({
+        url: request,
+        type: 'GET',
+        success: function (data) {
+            var sampleArr = base64ToArrayBuffer(data.bytes);
+            saveByteArray(data.title, sampleArr);
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
+    })
+}
+
+function base64ToArrayBuffer(base64) {
+    var binaryString = window.atob(base64);
+    var binaryLen = binaryString.length;
+    var bytes = new Uint8Array(binaryLen);
+    for (var i = 0; i < binaryLen; i++) {
+       var ascii = binaryString.charCodeAt(i);
+       bytes[i] = ascii;
+    }
+    return bytes;
+ }
+
+function saveByteArray(reportName, byte) {
+    var blob = new Blob([byte], {type: "application/pdf"});
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    var fileName = reportName;
+    link.download = fileName;
+    link.click();
+};
