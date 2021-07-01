@@ -8,6 +8,7 @@ button{
    border:none;
    outline:none;
    background:white;
+   font-size: 1rem;
 }
 
 body{
@@ -16,6 +17,7 @@ body{
 
 #top-bar{
   top:0;
+  z-index:1;
   background:#EFEFEF;
   border-bottom: 1px solid lightgray;
   box-sizing:border-box;
@@ -60,7 +62,7 @@ body{
   position: fixed !important;
 }
 
-#link-button, #share-button{
+#link-button, #share-button, #menu-button{
   color:white;
   height: 4vh;
   width: 4vh;
@@ -75,12 +77,67 @@ body{
   margin-left:1vw;
 }
 
+#menu-button{
+  background:none;
+  margin-left:1vw;
+}
+
+.menu{
+
+    position:fixed;
+    z-index: 1;
+
+    background:#efefef;
+    border-right: 1px solid lightgray;
+
+    display:flex;
+    flex-direction:column;
+
+    top: 8vh;
+    height: 92vh;
+    width: 20vw;
+
+    transition:0.25s;
+    transform: translateX(-100%);
+
+}
+
+.menu-active{
+    transform: translateX(0%);
+}
+
+.menu-list-item{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:1vh;
+    margin-bottom:0;
+}
+
+.menu-list-button{
+    padding:1vh;
+    border-radius:1vh;
+}
+
+.menu-list-link{
+    padding:1vh;
+    text-decoration:none;
+    color: black;
+    border-radius:1vh;
+    background: white;
+}
+
+.menu-recent{
+    width:100%;
+}
+
 #share-button{
   background: #7ACC7D;
   margin-left:0.5vw;
 }
 
 #share-input-wrapper{
+  z-index:1;
   visibility:hidden;
   border-radius:999px;
   box-sizing:border-box;
@@ -290,10 +347,12 @@ body{
     color:lightgray;
     outline:none;
     border:none;
+    background:none;
 }
 
 .editor-star-version{
     margin-right:1vw;
+    background:none;
     display:flex;
     justify-content:center;
     align-items:center;

@@ -1,5 +1,9 @@
 package tanto.multidoc;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.StandardDecryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +21,8 @@ import tanto.multidoc.repos.VersionRepository;
 import tanto.multidoc.util.Util;
 
 import javax.print.Doc;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Controller
@@ -245,6 +251,63 @@ public class MainController {
 
         doc.getBlocks().get(version.getBlockNumber()).setPreferred(version.getVersionNumber());
         documentRepository.save(doc);
+
+    }
+
+    @ResponseBody
+    @PostMapping("get-doc-title")
+    public String getDocTitleRequest(@RequestBody DocTitleRequest link){
+        return documentRepository.findById(link.getSource()).get().getTitle();
+    }
+
+    @GetMapping("delete-document/{link}")
+    public String deleteDocumentRequest(@PathVariable String link){
+        documentRepository.deleteById(link);
+        return "redirect:/";
+    }
+
+    @GetMapping("download-document/{link}")
+    public String downloadDocumentRequest(@PathVariable String link) throws Exception{
+
+        Document doc = documentRepository.findById(link).get();
+
+        com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+        PdfWriter.getInstance(document, new FileOutputStream("iTextHelloWorld.pdf"));
+
+        BaseFont bf=BaseFont.createFont("arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+        document.open();
+        Font documentTitleFont = new Font(bf, 24, Font.BOLD, BaseColor.BLACK);
+
+        Font blockTitleFont = new Font(bf, 18, Font.BOLD, BaseColor.BLACK);
+        Font font = new Font(bf, 14, Font.NORMAL, BaseColor.BLACK);
+
+        Paragraph preface = new Paragraph();
+        preface.add(new Paragraph(doc.getTitle(), documentTitleFont));
+        document.add(preface);
+        document.add( Chunk.NEWLINE );
+        
+        for (Block b : doc.getBlocks()){
+
+            preface = new Paragraph();
+            preface.add(new Paragraph(b.getTitle(), blockTitleFont));
+            document.add(preface);
+            document.add( Chunk.NEWLINE );
+
+            preface = new Paragraph();
+            preface.add(new Paragraph(b.getPreferred().getContent(), font));
+            document.add(preface);
+            document.add( Chunk.NEWLINE );
+
+            document.add(new Chunk("by: " + b.getPreferred().getAuthor(), font));
+            document.add( Chunk.NEWLINE );
+            document.add( Chunk.NEWLINE );
+
+        }
+
+        document.close();
+
+        return "redirect:/";
 
     }
 

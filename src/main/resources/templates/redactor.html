@@ -13,9 +13,10 @@
 <body>
 
 <div id="top-bar">
+    <button id="menu-button" onclick="openMenu()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="gray" width="100%" height="100%" viewBox="0 0 24 24"><path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z"/></svg>
+    </button>
     <button id="link-button" onclick="share()">🡭</button>
-    <div id="share-input-wrapper"><input id="share-input" readonly><button id="share-input-copy" onclick="copyToClipboard()">copy</button><button id="share-input-close" onclick="closeShare()">x</button></div>
-<!--    <div id="share-button">⮫</div>-->
     <input id="mdoc-title" onchange="saveDocTitle(this)" th:value="${title}">
 
 <!--    <div class="button-container-wrapper">-->
@@ -33,6 +34,21 @@
 <!--    </div>-->
 
     <div id="toolbar-container"></div>
+</div>
+
+<div id="menu" class="menu">
+    <a href="/" style="background:#9559FF; color:white" class="menu-list-link menu-list-item">Go to main page</a>
+    <div id="download-document-wrapper"></div>
+    <div id="delete-document-wrapper"></div>
+    <hr class="menu-list-item">
+    <p class="menu-list-item">Recent</p>
+    <div id="menu-recent"></div>
+</div>
+
+<div id="share-input-wrapper">
+    <input id="share-input" readonly>
+    <button id="share-input-copy" onclick="copyToClipboard()">copy</button>
+    <button id="share-input-close" onclick="closeShare()">x</button>
 </div>
 
 <div id="new-block">
