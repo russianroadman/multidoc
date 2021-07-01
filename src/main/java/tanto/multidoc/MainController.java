@@ -270,7 +270,6 @@ public class MainController {
 
         com.itextpdf.text.Document document = new com.itextpdf.text.Document();
 
-        FileOutputStream fileStream = new FileOutputStream("iTextHelloWorld.pdf");
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         PdfWriter.getInstance(document, stream);
