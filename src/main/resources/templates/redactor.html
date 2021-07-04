@@ -6,7 +6,7 @@
     <title>MDOC</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <link rel="icon" type="image/png" th:href="@{../static/fav.png}">
-    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/decoupled-document/ckeditor.js"></script>
+<!--    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/decoupled-document/ckeditor.js"></script>-->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 </head>
@@ -33,7 +33,7 @@
 <!--        </div>-->
 <!--    </div>-->
 
-    <div id="toolbar-container"></div>
+<!--    <div id="toolbar-container"></div>-->
 </div>
 
 <div id="menu" class="menu">
@@ -75,7 +75,7 @@
 
     <div class="block" th:each="block : ${blocks}">
         <div class="block-content">
-            <div class="editor">
+            <div class="editor-wrapper">
                 <div th:switch="${block.getVersions().get(0).isPreferred()}" class="editor-bar">
                     <button th:case="true" class="editor-star-version" onclick="starVersion(this)">
                         <svg fill="#fff491" class="editor-star-version-svg" xmlns="http://www.w3.org/2000/svg" width="1.5vw" height="1.5vw" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
@@ -92,7 +92,13 @@
                     <button class="context-actions-button" onclick="deleteVersion(this)" style="border-top:1px solid lightgray; border-bottom:1px solid lightgray;">delete version</button>
                     <button class="context-actions-button" onclick="closeEditorContextMenu(this)">close</button>
                 </div>
-                <textarea class="textarea-editor" onchange="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea>
+
+                <textarea class="textarea-editor" onkeyup="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea>
+
+<!--                CKEDITOR                        -->
+<!--                <div class="editor"></div>-->
+<!--                CKEDITOR                        -->
+
             </div>
         </div>
         <div class="block-controller">
@@ -136,6 +142,76 @@
 
 
 <script src="redactor.js"></script>
+<script src="script.js"></script>
+
+<!--CKEDITOR-->
+
+<script>
+
+    applyEditors();
+
+    function applyEditors(){
+        var x = document.getElementsByClassName('editor');
+
+        for (var i = 0; i < x.length; i++){
+            BalloonEditor
+            .create( x[i], {
+            plugins: [Autosave ],
+            toolbar: {
+                items: [
+                    'fontFamily',
+                    'fontSize',
+                    'fontColor',
+                    'fontBackgroundColor',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'bulletedList',
+                    'numberedList',
+                    'insertTable',
+                    'undo',
+                    'redo',
+                    'alignment',
+                    'removeFormat'
+                ]
+            },
+            language: 'en',
+            image: {
+                toolbar: [
+                    'imageTextAlternative',
+                    'imageStyle:full',
+                    'imageStyle:side'
+                ]
+            },
+            autosave: {
+                save( editor ) {
+                    // The saveData() function must return a promise
+                    // which should be resolved when the data is successfully saved.
+                    return saveData( editor.getData() );
+                }
+            },
+            table: {
+                contentToolbar: [
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells'
+                ]
+            },
+                licenseKey: '',
+            } )
+            .then( editor => {
+                window.editor = editor;
+            } )
+            .catch( error => {
+                console.error( 'Oops, something went wrong!' );
+                console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+                console.warn( 'Build id: kipsbl6tnqa0-dwsdpsjqxezr' );
+                console.error( error );
+            } );
+        }
+    }
+
+</script>
 
 </body>
 </html>

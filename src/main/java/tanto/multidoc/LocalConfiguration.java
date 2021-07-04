@@ -13,7 +13,7 @@ import java.util.Collections;
  * I have no idea how this works
  * */
 @Configuration
-public class FaviconConfiguration {
+public class LocalConfiguration {
 
     @Bean
     public SimpleUrlHandlerMapping customFaviconHandlerMapping() {
@@ -31,4 +31,5 @@ public class FaviconConfiguration {
         requestHandler.setLocations(Collections.singletonList(new ClassPathResource("/")));
         return requestHandler;
     }
+
 }

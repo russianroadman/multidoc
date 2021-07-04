@@ -1,5 +1,8 @@
 package tanto.multidoc.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +14,8 @@ public class Block {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "default_sequence")
     private Integer id;
     private String title;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SELECT)
     @OrderBy("id")
     private List<Version> versions = new ArrayList<>();
 

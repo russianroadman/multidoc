@@ -18,6 +18,7 @@ import tanto.multidoc.util.Util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 @Controller
 public class MainController {
@@ -247,7 +248,13 @@ public class MainController {
     @ResponseBody
     @PostMapping("get-doc-title")
     public String getDocTitleRequest(@RequestBody DocTitleRequest link){
-        return documentRepository.findById(link.getSource()).get().getTitle();
+        String out;
+        try{
+            out = documentRepository.findById(link.getSource()).get().getTitle();
+        } catch (NoSuchElementException e) {
+            out = null;
+        }
+        return out;
     }
 
     @GetMapping("delete-document/{link}")

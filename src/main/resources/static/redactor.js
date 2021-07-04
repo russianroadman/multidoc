@@ -5,12 +5,12 @@ window.onload = function() {
     autosizeTextAreas();
     loadLinksFromCookies();
     addLinkToCookies();
+    updateVersions();
 };
 
 function setDownloadDocWrapper(){
     var link = window.location.search.toString().substring(6);
     document.getElementById("download-document-wrapper").innerHTML = '<button style="background:#82b2ff; color:white" class="menu-list-button menu-list-item" onclick="downloadDocument()">Download .pdf</button>'
-    //'<form action="download-document/'+link+'" method="get" style="display:flex;flex-direction: column;align-items: stretch;"><button style="background:#82b2ff; color:white" class="menu-list-button menu-list-item">Download .pdf</button></form>';
 }
 
 function setDocumentWrapper(){
@@ -35,7 +35,7 @@ function loadLinksFromCookies(){
         html = '';
         for (var i = 0; i < x.length; i++){
             name = getNameByLink(x[i].substring(x[i].indexOf('=')+1));
-            if (name != null){
+            if (name != ''){
                 html += '<a class="menu-list-link menu-list-item" href="'+ x[i] +'">'+name+'</a>';
             }
         }
@@ -100,7 +100,6 @@ function closeEditorContextMenu(element){
 }
 
 function openMenu(){
-    /*$("#menu").css("transform", "translateX(0%)");*/
     $('.menu').toggleClass('menu-active');
 }
 
@@ -202,6 +201,37 @@ function saveVersion(element){
     });
 }
 
+function updateVersions(){
+    var blocks = document.getElementsByClassName('block');
+    for (var i = 0; i < 1; i++){
+
+        var textarea = blocks[i].getElementsByClassName('textarea-editor')[0];
+        content = {
+            content : textarea.value,
+            blockNumber : blocks[i].getElementsByClassName("block-number")[0].innerHTML,
+            versionNumber : blocks[i].getElementsByClassName("block-version")[0].innerHTML,
+            link : window.location.search
+        }
+        console.log("content: ", content);
+        $.ajax({
+            type : "POST",
+            contentType : "application/json",
+            url : "update-version",
+            data : JSON.stringify(content),
+            success : function(data) {
+                console.log("SUCCESS: ", data);
+                textarea.value = data.content;
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+            },
+            complete: function () {
+                updateVersions();
+            }
+        });
+    }
+}
+
 function addNewBlock(element){
     element.style.visibility = "hidden";
     block = {
@@ -216,6 +246,8 @@ function addNewBlock(element){
         data : JSON.stringify(block),
         success: function (data) {
             document.getElementById("content").outerHTML = data;
+            // **************************************************
+            applyEditors();
             autosizeTextAreas();
         },
         error : function(e) {
@@ -268,6 +300,8 @@ function addNewVersion(element){
                         .getElementsByClassName("editor-star-version-svg")[0]
                         .style.fill = '#efefef'
                     autosizeTextAreas();
+                    // **************************************************
+                    applyEditors();
                 },
                 error : function(e) {
                     console.log("ERROR: ", e);
@@ -337,6 +371,8 @@ function changeVersion(element, right){
 
 
                 autosizeTextAreas();
+                // **************************************************
+                applyEditors();
             },
             error : function(e) {
                 console.log("ERROR: ", e);
@@ -360,6 +396,8 @@ function deleteBlock(element){
         success: function (data) {
             document.getElementById("content").outerHTML = data;
             autosizeTextAreas();
+            // **************************************************
+            applyEditors();
         },
         error : function(e) {
             console.log("ERROR: ", e);
@@ -384,6 +422,8 @@ function deleteVersion(element){
         success: function (data) {
             document.getElementById("content").outerHTML = data;
             autosizeTextAreas();
+            // **************************************************
+            applyEditors();
         },
         error : function(e) {
             console.log("ERROR: ", e);
@@ -450,6 +490,7 @@ function downloadDocument(){
     })
 }
 
+/************** PDF **************/
 function base64ToArrayBuffer(base64) {
     var binaryString = window.atob(base64);
     var binaryLen = binaryString.length;
@@ -469,3 +510,14 @@ function saveByteArray(reportName, byte) {
     link.download = fileName;
     link.click();
 };
+
+
+/************** CKEDITOR **************/
+function saveData(data){
+    let myPromise = new Promise(function(myResolve, myReject) {
+    // "Producing Code" (May take some time)
+      myResolve(); // when successful
+      myReject();  // when error
+    });
+    return myPromise;
+}

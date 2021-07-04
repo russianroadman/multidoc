@@ -1,5 +1,9 @@
 package tanto.multidoc.model;
 
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +14,7 @@ public class Document {
     @Id
     private String link;
     private String title;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id")
     private List<Block> blocks = new ArrayList<>();
 
