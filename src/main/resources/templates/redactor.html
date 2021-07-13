@@ -93,7 +93,8 @@
                     <button class="context-actions-button" onclick="closeEditorContextMenu(this)">close</button>
                 </div>
 
-                <textarea class="textarea-editor" onkeyup="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea>
+                <textarea class="textarea-editor" onfocus="setUpdateElement(this);" onkeyup="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea>
+<!--                <textarea class="textarea-editor" onfocus="updateVersions(this);" onkeyup="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea>-->
 
 <!--                CKEDITOR                        -->
 <!--                <div class="editor"></div>-->

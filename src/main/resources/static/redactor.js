@@ -1,3 +1,5 @@
+//var focused = document.getElementsByClassName("textarea-editor")[0];
+//var xhr = null;
 
 window.onload = function() {
     setDownloadDocWrapper();
@@ -201,35 +203,117 @@ function saveVersion(element){
     });
 }
 
-function updateVersions(){
-    var blocks = document.getElementsByClassName('block');
-    for (var i = 0; i < 1; i++){
+//function getContent(){
+//    var block = focused.parentElement.parentElement.parentElement;
+//    content = {
+//        content : focused.value,
+//        blockNumber : block.getElementsByClassName("block-number")[0].innerHTML,
+//        versionNumber : block.getElementsByClassName("block-version")[0].innerHTML,
+//        link : window.location.search
+//    }
+//    $.ajax({
+//        type : "POST",
+//        contentType : "application/json",
+//        url : "get-version",
+//        data : JSON.stringify(content),
+//        success : function(data) {
+//            console.log("SUCCESS: ", data);
+//            focused.value = data.content;
+//            autosizeTextAreas();
+//        },
+//        error : function(e) {
+//            console.log("ERROR: ", e);
+//        }
+//    });
+//}
 
-        var textarea = blocks[i].getElementsByClassName('textarea-editor')[0];
-        content = {
-            content : textarea.value,
+function updateVersions(){
+
+    var blocks = document.getElementsByClassName("block");
+    var _link = window.location.search;
+
+    var _blocks = [];
+
+    var content = {
+        link : _link
+    }
+
+    for (var i = 0; i < blocks.length; i++){
+
+        var data = {
             blockNumber : blocks[i].getElementsByClassName("block-number")[0].innerHTML,
             versionNumber : blocks[i].getElementsByClassName("block-version")[0].innerHTML,
-            link : window.location.search
+            content : blocks[i].getElementsByClassName("textarea-editor")[0].value
         }
-        console.log("content: ", content);
-        $.ajax({
-            type : "POST",
-            contentType : "application/json",
-            url : "update-version",
-            data : JSON.stringify(content),
-            success : function(data) {
-                console.log("SUCCESS: ", data);
-                textarea.value = data.content;
-            },
-            error : function(e) {
-                console.log("ERROR: ", e);
-            },
-            complete: function () {
-                updateVersions();
-            }
-        });
+
+        _blocks.push(data);
+
     }
+
+    content.blocks = _blocks;
+
+    console.log(content);
+
+    $.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : "update-version",
+        data : JSON.stringify(content),
+        success : function(data) {
+            console.log('data aquired: ', data);
+            for (var i = 0; i < data.blocks.length; i++){
+                /* not safe, fix later */
+                document.getElementsByClassName("textarea-editor")[i].value = data.blocks[i].content;
+            }
+            autosizeTextAreas();
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        },
+        complete: function () {
+            updateVersions();
+        }
+    });
+
+//    for (var i = 0; i < 1; i++){
+//
+//        var focused = textareas[i];
+//        console.log("focused: ", focused.value);
+//
+//        var block = focused.parentElement.parentElement.parentElement;
+//        content = {
+//            content : focused.value,
+//            blockNumber : block.getElementsByClassName("block-number")[0].innerHTML,
+//            versionNumber : block.getElementsByClassName("block-version")[0].innerHTML,
+//            link : window.location.search
+//        }
+//        $.ajax({
+//            type : "POST",
+//            contentType : "application/json",
+//            url : "update-version",
+//            data : JSON.stringify(content),
+//            success : function(data) {
+//                console.log('data aquired');
+//                focused.value = data.content;
+//                autosizeTextAreas();
+//            },
+//            error : function(e) {
+//                console.log("ERROR: ", e);
+//            },
+//            complete: function () {
+//                updateVersions();
+//            }
+//        });
+//
+//    }
+
+
+}
+
+/* element which will updateVersions() update */
+function setUpdateElement(element){
+    //focused = element;
+    //console.log("focused: ", focused.value);
 }
 
 function addNewBlock(element){
