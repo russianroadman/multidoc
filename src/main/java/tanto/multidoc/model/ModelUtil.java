@@ -19,6 +19,24 @@ public class ModelUtil {
         return list;
     }
 
+    public static ArrayList<Version> getEntireVersionsList(Document d){
+        ArrayList<Version> list = new ArrayList<>();
+        for (Block block : d.getBlocks()){
+            for (Version version : block.getVersions()){
+                list.add(version);
+            }
+        }
+        return list;
+    }
+
+    public static ArrayList<String> getEntireVersionsListContents(ArrayList<Version> list){
+        ArrayList<String> out = new ArrayList<>();
+        for (Version version : list){
+            out.add(version.getContent());
+        }
+        return out;
+    }
+
 
 
 }

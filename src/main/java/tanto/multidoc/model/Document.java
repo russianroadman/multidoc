@@ -1,9 +1,5 @@
 package tanto.multidoc.model;
 
-import org.hibernate.FetchMode;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,4 +57,16 @@ public class Document {
         this.link = link;
     }
 
+    public boolean equalContent(Document d) {
+        if(
+            this.link.equals(d.getLink()) &&
+            (
+                    ModelUtil.getEntireVersionsListContents(ModelUtil.getEntireVersionsList(this))
+                            .equals(ModelUtil.getEntireVersionsListContents(ModelUtil.getEntireVersionsList(d)))
+            )
+        ){
+            return true;
+        }
+        return false;
+    }
 }

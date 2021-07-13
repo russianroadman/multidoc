@@ -16,6 +16,7 @@ import tanto.multidoc.model.Version;
 import tanto.multidoc.repos.DocumentRepository;
 import tanto.multidoc.util.Util;
 
+import javax.print.Doc;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -310,6 +311,19 @@ public class MainController {
 
         return new DownloadPdfResponse(doc.getTitle(), stream.toByteArray());
 
+    }
+
+    @ResponseBody
+    @PostMapping("get-version")
+    public UpdateResponse getContentResponse(@RequestBody UpdateRequest content){
+        UpdateResponse response = new UpdateResponse(documentRepository
+                .findById(content.getLink()).get()
+                .getBlocks()
+                .get(content.getBlockNumber())
+                .getVersions()
+                .get(content.getVersionNumber())
+                .getContent());
+        return response;
     }
 
 }

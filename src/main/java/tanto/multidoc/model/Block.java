@@ -15,7 +15,7 @@ public class Block {
     private Integer id;
     private String title;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SELECT)
+    @Fetch(value = FetchMode.SELECT) // this leads to N+1 problem
     @OrderBy("id")
     private List<Version> versions = new ArrayList<>();
 
