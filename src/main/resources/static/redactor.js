@@ -105,6 +105,14 @@ function openMenu(){
     $('.menu').toggleClass('menu-active');
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function callSleep(ms){
+  await sleep(ms);
+}
+
 /****************************************************************/
 /***************************** AJAX *****************************/
 /****************************************************************/
@@ -187,6 +195,7 @@ function saveVersion(element){
         versionNumber : vNumber,
         link : window.location.search
     }
+    lastModifiedContent = element.value;
     $.ajax({
         type : "POST",
         contentType : "application/json",
@@ -195,7 +204,6 @@ function saveVersion(element){
         dataType : 'json',
         success : function(data) {
             console.log("SUCCESS: ", data);
-            element.value = data.content;
         },
         error : function(e) {
             console.log("ERROR: ", e);

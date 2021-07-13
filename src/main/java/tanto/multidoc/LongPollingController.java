@@ -23,6 +23,7 @@ public class LongPollingController {
     DocumentRepository documentRepository;
 
     private ExecutorService clients = Executors.newFixedThreadPool(5);
+    private final long LATENCY = 100;
 
     @ResponseBody
     @PostMapping("update-version")
@@ -85,7 +86,7 @@ public class LongPollingController {
                 } else {
 
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(LATENCY);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
