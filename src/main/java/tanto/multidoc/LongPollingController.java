@@ -23,11 +23,93 @@ public class LongPollingController {
     DocumentRepository documentRepository;
 
     private ExecutorService clients = Executors.newFixedThreadPool(5);
-    private final long LATENCY = 100;
+    private final long LATENCY = 1;
 
     @ResponseBody
     @PostMapping("update-version")
     public DeferredResult<BigUpdateResponse> updateVersionRequest(@RequestBody BigUpdateRequest content){
+
+//        DeferredResult<BigUpdateResponse> deferredResult = new DeferredResult<>();
+//        List<String> actual = new ArrayList<>();
+//
+//        List<String> visible = new ArrayList<>();
+//        for (int i = 0; i < content.getBlocks().size(); i++){
+//            JsonBlock current = content.getBlocks().get(i);
+//            int bi = current.getBlockNumber();
+//            int vi = current.getVersionNumber();
+//            String actualVerContent = documentRepository.findById(content.getLink()).get()
+//                    .getBlocks()
+//                    .get( bi )
+//                    .getVersions()
+//                    .get( vi )
+//                    .getContent();
+//            visible.add(actualVerContent);
+//        }
+//
+//        clients.execute( () -> {
+//
+//            boolean hasDifference = false;
+//
+//            while (true){
+//
+//                actual.clear();
+//
+//                for (int i = 0; i < content.getBlocks().size(); i++){
+//
+//                    // getting current json block
+//                    JsonBlock current = content.getBlocks().get(i);
+//                    // and then parsing it
+//                    int bi = current.getBlockNumber();
+//                    int vi = current.getVersionNumber();
+//
+//                    // getting actual version content for current json block
+//                    String actualVerContent = documentRepository.findById(content.getLink()).get()
+//                            .getBlocks()
+//                            .get( bi )
+//                            .getVersions()
+//                            .get( vi )
+//                            .getContent();
+//
+//                    // adding actual version content to list
+//                    // so we can use list later for passing it to the client
+//                    actual.add(actualVerContent);
+//
+//                    // check if there is a difference
+//                    if ( ! hasDifference ){
+//                        //System.out.println(visible.get(i));
+//                        if ( ! visible.get(i).equals( actualVerContent ) ) {
+//                            hasDifference = true;
+//                        }
+//                    }
+//
+//                }
+//
+//                if ( hasDifference ){
+//
+//                    List<JsonBlock> list = new ArrayList<>();
+//
+//                    for (int i = 0; i < content.getBlocks().size(); i++){
+//                        JsonBlock item = content.getBlocks().get(i);
+//                        item.setContent(actual.get(i));
+//                        list.add(item);
+//                    }
+//
+//                    deferredResult.setResult(new BigUpdateResponse(list));
+//                    break;
+//
+//                } else {
+//
+//                    try {
+//                        Thread.sleep(LATENCY);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//
+//            }
+//
+//        } );
 
         DeferredResult<BigUpdateResponse> deferredResult = new DeferredResult<>();
         List<String> actual = new ArrayList<>();
@@ -96,37 +178,6 @@ public class LongPollingController {
             }
 
         } );
-
-//        DeferredResult<UpdateResponse> deferredResult = new DeferredResult<>();
-//        final String[] actualContent = new String[1];
-//        String clientVisibleContent = content.getContent();
-//
-//        clients.execute(() -> {
-//
-//            while(true){
-//
-//                actualContent[0] = documentRepository
-//                        .findById(content.getLink()).get()
-//                        .getBlocks()
-//                        .get(content.getBlockNumber())
-//                        .getVersions()
-//                        .get(content.getVersionNumber())
-//                        .getContent();
-//
-//                if( clientVisibleContent.equals( actualContent[0] ) ){
-//                    try {
-//                        Thread.sleep(1);
-//                    } catch (InterruptedException e) {
-//                        System.out.println(e.getMessage());
-//                    }
-//                } else {
-//                    deferredResult.setResult(new UpdateResponse( actualContent[0] ));
-//                    break;
-//                }
-//
-//            }
-//
-//        });
 
         return deferredResult;
     }

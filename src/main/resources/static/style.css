@@ -372,6 +372,26 @@ body{
   text-align-last: center;
 }
 
+.textarea-editor-fake{
+  position:absolute;
+  color: rgba(0, 0, 0, 0.0);
+  caret-color: black;
+  background:none;
+  height:100%;
+  width:100%;
+  left:0;
+  top:0;
+  border:none;
+  outline:none;
+  resize: none;
+  border-radius: 2vw 2vw 0 0;
+  padding:2vw;
+  box-sizing:border-box;
+  text-align: justify;
+  -moz-text-align-last: center; /* Firefox 12+ */
+  text-align-last: center;
+}
+
 .block-controller{
   width:100%;
   height:5vh;
@@ -482,12 +502,16 @@ body{
 }
 
 .invisible-button{
-   background: rgba(0,0,0,0.0);
-   border:none;
-   outline:none;
+    background: rgba(0,0,0,0.0);
+    border:none;
+    outline:none;
 }
 
-
+.editor{
+    margin:1vw;
+    border: none !important;
+    box-shadow: none !important;
+}
 
 
 

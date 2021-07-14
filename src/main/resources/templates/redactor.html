@@ -93,11 +93,11 @@
                     <button class="context-actions-button" onclick="closeEditorContextMenu(this)">close</button>
                 </div>
 
-                <textarea class="textarea-editor" onfocus="setUpdateElement(this);" onkeyup="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea>
-<!--                <textarea class="textarea-editor" onfocus="updateVersions(this);" onkeyup="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea>-->
+<!--                <textarea class="textarea-editor" onkeyup="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea>-->
+<!--                <textarea class="textarea-editor-fake" onkeyup="saveVersion(this);">[[${block.getVersions().get(0).getContent()}]]</textarea>-->
 
 <!--                CKEDITOR                        -->
-<!--                <div class="editor"></div>-->
+                <div class="editor" onkeyup="saveVersionCKEditor(this);"></div>
 <!--                CKEDITOR                        -->
 
             </div>
@@ -157,7 +157,7 @@
         for (var i = 0; i < x.length; i++){
             BalloonEditor
             .create( x[i], {
-            plugins: [Autosave ],
+            //plugins: [Autosave],
             toolbar: {
                 items: [
                     'fontFamily',
@@ -201,7 +201,8 @@
                 licenseKey: '',
             } )
             .then( editor => {
-                window.editor = editor;
+                //window.editor = editor;
+                editors.push(editor);
             } )
             .catch( error => {
                 console.error( 'Oops, something went wrong!' );

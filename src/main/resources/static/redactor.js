@@ -1,5 +1,5 @@
-//var focused = document.getElementsByClassName("textarea-editor")[0];
-//var xhr = null;
+
+var editors = [];
 
 window.onload = function() {
     setDownloadDocWrapper();
@@ -7,7 +7,8 @@ window.onload = function() {
     autosizeTextAreas();
     loadLinksFromCookies();
     addLinkToCookies();
-    updateVersions();
+    //updateVersions();
+    updateVersionsCKEditor();
 };
 
 function setDownloadDocWrapper(){
@@ -54,10 +55,12 @@ function addLinkToCookies(){
 }
 
 function autosizeTextAreas(){
-    var x = document.getElementsByClassName("textarea-editor")
+
+    var x = document.getElementsByClassName("textarea-editor");
     for (const item of x){
         autosize(item);
     }
+
 }
 
 function showNewBlock(){
@@ -195,7 +198,6 @@ function saveVersion(element){
         versionNumber : vNumber,
         link : window.location.search
     }
-    lastModifiedContent = element.value;
     $.ajax({
         type : "POST",
         contentType : "application/json",
@@ -204,11 +206,13 @@ function saveVersion(element){
         dataType : 'json',
         success : function(data) {
             console.log("SUCCESS: ", data);
+            autosizeTextAreas();
         },
         error : function(e) {
             console.log("ERROR: ", e);
         }
     });
+
 }
 
 //function getContent(){
@@ -282,39 +286,6 @@ function updateVersions(){
             updateVersions();
         }
     });
-
-//    for (var i = 0; i < 1; i++){
-//
-//        var focused = textareas[i];
-//        console.log("focused: ", focused.value);
-//
-//        var block = focused.parentElement.parentElement.parentElement;
-//        content = {
-//            content : focused.value,
-//            blockNumber : block.getElementsByClassName("block-number")[0].innerHTML,
-//            versionNumber : block.getElementsByClassName("block-version")[0].innerHTML,
-//            link : window.location.search
-//        }
-//        $.ajax({
-//            type : "POST",
-//            contentType : "application/json",
-//            url : "update-version",
-//            data : JSON.stringify(content),
-//            success : function(data) {
-//                console.log('data aquired');
-//                focused.value = data.content;
-//                autosizeTextAreas();
-//            },
-//            error : function(e) {
-//                console.log("ERROR: ", e);
-//            },
-//            complete: function () {
-//                updateVersions();
-//            }
-//        });
-//
-//    }
-
 
 }
 
@@ -606,10 +577,97 @@ function saveByteArray(reportName, byte) {
 
 /************** CKEDITOR **************/
 function saveData(data){
-    let myPromise = new Promise(function(myResolve, myReject) {
-    // "Producing Code" (May take some time)
-      myResolve(); // when successful
-      myReject();  // when error
+    // ?
+}
+
+function saveVersionCKEditor(element){
+    var bNumber = element.parentElement.parentElement.parentElement.getElementsByClassName("block-number")[0].innerHTML;
+    var vNumber = element.parentElement.parentElement.parentElement.getElementsByClassName("block-version")[0].innerHTML;
+    var value = editors[parseInt(bNumber)-1].getData();
+    version = {
+        content : value,
+        blockNumber : bNumber,
+        versionNumber : vNumber,
+        link : window.location.search
+    }
+    $.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : "save-version",
+        data : JSON.stringify(version),
+        dataType : 'json',
+        success : function(data) {
+            console.log("SUCCESS: ", data);
+            autosizeTextAreas();
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
     });
-    return myPromise;
+
+}
+
+function updateVersionsCKEditor(){
+
+    var blocks = document.getElementsByClassName("block");
+    var _link = window.location.search;
+
+    var _blocks = [];
+
+    var content = {
+        link : _link
+    }
+
+    for (var i = 0; i < blocks.length; i++){
+
+        var data = {
+            blockNumber : blocks[i].getElementsByClassName("block-number")[0].innerHTML,
+            versionNumber : blocks[i].getElementsByClassName("block-version")[0].innerHTML,
+            content : editors[i].getData()
+        }
+
+        _blocks.push(data);
+
+    }
+
+    content.blocks = _blocks;
+
+    console.log(content);
+
+    $.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : "update-version",
+        data : JSON.stringify(content),
+        success : function(data) {
+
+            console.log('data aquired: ', data);
+            for (var i = 0; i < data.blocks.length; i++){
+
+                var text = data.blocks[i].content;
+                var pos;
+                var range;
+
+                editors[i].model.change( writer => {
+                    pos = writer.createPositionAt( editors[i].model.document.selection.getLastPosition());
+                    range = writer.createRange( pos,editors[i].model.document.selection.getLastPosition());
+                } );
+
+                editors[i].setData(text);
+
+                editors[i].model.change( writer => {
+                    writer.setSelection( range );
+                } );
+
+            }
+            autosizeTextAreas();
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        },
+        complete: function () {
+            updateVersionsCKEditor();
+        }
+    });
+
 }
