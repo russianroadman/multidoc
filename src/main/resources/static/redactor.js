@@ -1,4 +1,4 @@
-
+var focused = null;
 var editors = [];
 
 window.onload = function() {
@@ -215,29 +215,29 @@ function saveVersion(element){
 
 }
 
-//function getContent(){
-//    var block = focused.parentElement.parentElement.parentElement;
-//    content = {
-//        content : focused.value,
-//        blockNumber : block.getElementsByClassName("block-number")[0].innerHTML,
-//        versionNumber : block.getElementsByClassName("block-version")[0].innerHTML,
-//        link : window.location.search
-//    }
-//    $.ajax({
-//        type : "POST",
-//        contentType : "application/json",
-//        url : "get-version",
-//        data : JSON.stringify(content),
-//        success : function(data) {
-//            console.log("SUCCESS: ", data);
-//            focused.value = data.content;
-//            autosizeTextAreas();
-//        },
-//        error : function(e) {
-//            console.log("ERROR: ", e);
-//        }
-//    });
-//}
+function getContent(editor, i){
+    var block = document.getElementsByClassName('block')[i];
+    console.log('i: ', i, ', block: ', block);
+    content = {
+        content : "",
+        blockNumber : block.getElementsByClassName("block-number")[0].innerHTML,
+        versionNumber : block.getElementsByClassName("block-version")[0].innerHTML,
+        link : window.location.search
+    }
+    $.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : "get-version",
+        data : JSON.stringify(content),
+        success : function(data) {
+            console.log("SUCCESS: ", data);
+            editor.setData(data.content);
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        }
+    });
+}
 
 function updateVersions(){
 
@@ -264,8 +264,6 @@ function updateVersions(){
 
     content.blocks = _blocks;
 
-    console.log(content);
-
     $.ajax({
         type : "POST",
         contentType : "application/json",
@@ -287,12 +285,6 @@ function updateVersions(){
         }
     });
 
-}
-
-/* element which will updateVersions() update */
-function setUpdateElement(element){
-    //focused = element;
-    //console.log("focused: ", focused.value);
 }
 
 function addNewBlock(element){
@@ -354,10 +346,14 @@ function addNewVersion(element){
                     console.log("SUCCESS: ", data);
                     element = document.getElementsByClassName("block")[bNum-1];
                     element.getElementsByClassName("block-author")[0].value = data.author;
-                    var text = element.getElementsByClassName("textarea-editor")[0];
-                    text.value = data.content;
-                    text.style.height = "auto";
-                    text.style.height = text.scrollHeight+'px';
+
+//                    var text = element.getElementsByClassName("textarea-editor")[0];
+//                    text.value = data.content;
+//                    text.style.height = "auto";
+//                    text.style.height = text.scrollHeight+'px';
+
+                    editors[bNum-1].setData(data.content);
+
                     element.getElementsByClassName("block-version")[0].innerHTML = vNum+1;
                     element
                         .getElementsByClassName("editor-star-version-svg")[0]
@@ -402,11 +398,14 @@ function changeVersion(element, right){
 
                 element.parentElement.parentElement.getElementsByClassName("block-author")[0].value = data.author;
 
-                var text = element.parentElement.parentElement.parentElement
-                    .getElementsByClassName("textarea-editor")[0];
-                text.value = data.content;
-                text.style.height = "auto";
-                text.style.height = text.scrollHeight+'px';
+//                var text = element.parentElement.parentElement.parentElement
+//                    .getElementsByClassName("textarea-editor")[0];
+//                text.value = data.content;
+//                text.style.height = "auto";
+//                text.style.height = text.scrollHeight+'px';
+
+                editors[currentBlockNumber-1].setData(data.content);
+
                 if (right == "true"){
                     element.parentElement.parentElement.parentElement
                         .getElementsByClassName("block-version")[0].innerHTML = currentVersionNumber+1;
@@ -435,7 +434,7 @@ function changeVersion(element, right){
 
                 autosizeTextAreas();
                 // **************************************************
-                applyEditors();
+                //applyEditors();
             },
             error : function(e) {
                 console.log("ERROR: ", e);
@@ -632,8 +631,6 @@ function updateVersionsCKEditor(){
 
     content.blocks = _blocks;
 
-    console.log(content);
-
     $.ajax({
         type : "POST",
         contentType : "application/json",
@@ -648,16 +645,9 @@ function updateVersionsCKEditor(){
                 var pos;
                 var range;
 
-                editors[i].model.change( writer => {
-                    pos = writer.createPositionAt( editors[i].model.document.selection.getLastPosition());
-                    range = writer.createRange( pos,editors[i].model.document.selection.getLastPosition());
-                } );
-
-                editors[i].setData(text);
-
-                editors[i].model.change( writer => {
-                    writer.setSelection( range );
-                } );
+                if (!editors[i].editing.view.document.isFocused){
+                    editors[i].setData(text);
+                }
 
             }
             autosizeTextAreas();
@@ -671,3 +661,121 @@ function updateVersionsCKEditor(){
     });
 
 }
+
+function getContentCKEditor(){
+
+    var blocks = document.getElementsByClassName("block");
+    var _link = window.location.search;
+
+    var _blocks = [];
+
+    var content = {
+        link : _link
+    }
+
+    for (var i = 0; i < blocks.length; i++){
+
+        var data = {
+            blockNumber : blocks[i].getElementsByClassName("block-number")[0].innerHTML,
+            versionNumber : blocks[i].getElementsByClassName("block-version")[0].innerHTML,
+            content : editors[i].getData()
+        }
+
+        _blocks.push(data);
+
+    }
+
+    content.blocks = _blocks;
+
+    console.log(content);
+
+    $.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : "get-versions",
+        data : JSON.stringify(content),
+        success : function(data) {
+
+            for (var i = 0; i < data.blocks.length; i++){
+
+                var text = data.blocks[i].content;
+                var pos;
+                var range;
+
+                if (!editors[i].editing.view.document.isFocused){
+                    editors[i].setData(text);
+                }
+
+            }
+            autosizeTextAreas();
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+        },
+        complete: function () {
+            updateVersionsCKEditor();
+        }
+    });
+
+}
+
+/* editors */
+
+function applyEditors(){
+    editors = [];
+    var x = document.getElementsByClassName('editor');
+    var i;
+    for (i = 0; i < x.length; i++){
+        BalloonEditor
+        .create( x[i], {
+        toolbar: {
+            items: [
+                'fontFamily',
+                'fontSize',
+                'fontColor',
+                'fontBackgroundColor',
+                'bold',
+                'italic',
+                'underline',
+                'bulletedList',
+                'numberedList',
+                'insertTable',
+                'undo',
+                'redo',
+                'alignment',
+                'removeFormat'
+            ]
+        },
+        language: 'en',
+        image: {
+            toolbar: [
+                'imageTextAlternative',
+                'imageStyle:full',
+                'imageStyle:side'
+            ]
+        },
+        table: {
+            contentToolbar: [
+                'tableColumn',
+                'tableRow',
+                'mergeTableCells'
+            ]
+        },
+            licenseKey: '',
+        } )
+        .then( editor => {
+            editors.push(editor);
+            var v = editors.length-1;
+            console.log('editor ', v, ' has been initialized, id: ', editor.id);
+            getContent(editor, v);
+        } )
+        .catch( error => {
+            console.error( 'Oops, something went wrong!' );
+            console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+            console.warn( 'Build id: kipsbl6tnqa0-dwsdpsjqxezr' );
+            console.error( error );
+        } );
+    }
+
+}
+

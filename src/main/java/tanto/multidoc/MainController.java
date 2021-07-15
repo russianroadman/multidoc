@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tanto.multidoc.Functionality.*;
 import tanto.multidoc.model.Block;
@@ -19,6 +20,8 @@ import tanto.multidoc.util.Util;
 import javax.print.Doc;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -324,6 +327,46 @@ public class MainController {
                 .get(content.getVersionNumber())
                 .getContent());
         return response;
+    }
+
+    @ResponseBody
+    @PostMapping("get-versions")
+    public BigUpdateResponse getVersionsRequest(@RequestBody BigUpdateRequest content){
+
+        List<String> actual = new ArrayList<>();
+
+        for (int i = 0; i < content.getBlocks().size(); i++){
+
+            // getting current json block
+            JsonBlock current = content.getBlocks().get(i);
+            // and then parsing it
+            int bi = current.getBlockNumber();
+            int vi = current.getVersionNumber();
+
+            // getting actual version content for current json block
+            String actualVerContent = documentRepository.findById(content.getLink()).get()
+                    .getBlocks()
+                    .get( bi )
+                    .getVersions()
+                    .get( vi )
+                    .getContent();
+
+            // adding actual version content to list
+            // so we can use list later for passing it to the client
+            actual.add(actualVerContent);
+
+        }
+
+        List<JsonBlock> list = new ArrayList<>();
+
+        for (int i = 0; i < content.getBlocks().size(); i++){
+            JsonBlock item = content.getBlocks().get(i);
+            item.setContent(actual.get(i));
+            list.add(item);
+        }
+
+        return new BigUpdateResponse(list);
+
     }
 
 }

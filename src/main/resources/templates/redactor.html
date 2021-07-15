@@ -151,68 +151,6 @@
 
     applyEditors();
 
-    function applyEditors(){
-        var x = document.getElementsByClassName('editor');
-
-        for (var i = 0; i < x.length; i++){
-            BalloonEditor
-            .create( x[i], {
-            //plugins: [Autosave],
-            toolbar: {
-                items: [
-                    'fontFamily',
-                    'fontSize',
-                    'fontColor',
-                    'fontBackgroundColor',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'bulletedList',
-                    'numberedList',
-                    'insertTable',
-                    'undo',
-                    'redo',
-                    'alignment',
-                    'removeFormat'
-                ]
-            },
-            language: 'en',
-            image: {
-                toolbar: [
-                    'imageTextAlternative',
-                    'imageStyle:full',
-                    'imageStyle:side'
-                ]
-            },
-            autosave: {
-                save( editor ) {
-                    // The saveData() function must return a promise
-                    // which should be resolved when the data is successfully saved.
-                    return saveData( editor.getData() );
-                }
-            },
-            table: {
-                contentToolbar: [
-                    'tableColumn',
-                    'tableRow',
-                    'mergeTableCells'
-                ]
-            },
-                licenseKey: '',
-            } )
-            .then( editor => {
-                //window.editor = editor;
-                editors.push(editor);
-            } )
-            .catch( error => {
-                console.error( 'Oops, something went wrong!' );
-                console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-                console.warn( 'Build id: kipsbl6tnqa0-dwsdpsjqxezr' );
-                console.error( error );
-            } );
-        }
-    }
-
 </script>
 
 </body>
