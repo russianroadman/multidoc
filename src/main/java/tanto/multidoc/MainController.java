@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tanto.multidoc.Functionality.*;
 import tanto.multidoc.model.Block;
 import tanto.multidoc.model.Document;
+import tanto.multidoc.model.ModelUtil;
 import tanto.multidoc.model.Version;
 import tanto.multidoc.repos.DocumentRepository;
 import tanto.multidoc.util.Util;
@@ -269,50 +270,13 @@ public class MainController {
 
     @ResponseBody
     @GetMapping("download-document/{link}")
-    public DownloadPdfResponse downloadDocumentRequest(@PathVariable String link) throws DocumentException, IOException {
+    public DownloadPdfResponse downloadDocumentRequest(@PathVariable String link) {
 
-        Document doc = documentRepository.findById(link).get();
+        byte[] array = new byte[0];
+        //array = ModelUtil.getPdf(link);
+        array = ModelUtil.getHtmlToPdf(link, documentRepository);
 
-        com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-        PdfWriter.getInstance(document, stream);
-
-        BaseFont bf=BaseFont.createFont("arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
-        document.open();
-        Font documentTitleFont = new Font(bf, 24, Font.BOLD, BaseColor.BLACK);
-
-        Font blockTitleFont = new Font(bf, 18, Font.BOLD, BaseColor.BLACK);
-        Font font = new Font(bf, 14, Font.NORMAL, BaseColor.BLACK);
-
-        Paragraph preface = new Paragraph();
-        preface.add(new Paragraph(doc.getTitle(), documentTitleFont));
-        document.add(preface);
-        document.add( Chunk.NEWLINE );
-        
-        for (Block b : doc.getBlocks()){
-
-            preface = new Paragraph();
-            preface.add(new Paragraph(b.getTitle(), blockTitleFont));
-            document.add(preface);
-            document.add( Chunk.NEWLINE );
-
-            preface = new Paragraph();
-            preface.add(new Paragraph(b.getPreferred().getContent(), font));
-            document.add(preface);
-            document.add( Chunk.NEWLINE );
-
-            document.add(new Chunk("by: " + b.getPreferred().getAuthor(), font));
-            document.add( Chunk.NEWLINE );
-            document.add( Chunk.NEWLINE );
-
-        }
-
-        document.close();
-
-        return new DownloadPdfResponse(doc.getTitle(), stream.toByteArray());
+        return new DownloadPdfResponse(ModelUtil.getDocumentTitle(link, documentRepository), array);
 
     }
 
