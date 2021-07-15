@@ -102,9 +102,7 @@ public class ModelUtil {
         Document document = documentRepository.findById(link).get();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        stream.write(new byte[] {40, 46, 55});
-
-        /*ArrayList<String> c = getEntireVersionsListContents(getPreferredVersionsList(document));
+        ArrayList<String> c = getEntireVersionsListContents(getPreferredVersionsList(document));
         String initialString = "";
         for (String item : c){
             initialString += "<br>" + item;
@@ -114,7 +112,7 @@ public class ModelUtil {
 
         HtmlLoadOptions htmlLoadOptions = new HtmlLoadOptions();
         com.aspose.pdf.Document doc = new com.aspose.pdf.Document(inputStream, htmlLoadOptions);
-        doc.save(stream);*/
+        doc.save(stream);
 
         return stream.toByteArray();
     }
