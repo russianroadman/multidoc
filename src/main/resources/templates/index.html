@@ -5,9 +5,11 @@
     <title>MDOC</title>
     <link rel="icon" type="image/png" th:href="@{../static/fav.png}">
     <link href="index-style.css" rel="stylesheet" type="text/css" />
-
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 <body>
+
+
 
     <div class="welcome-wrapper">
         <div class="welcome">
@@ -18,6 +20,16 @@
                 </div>
             </a>
         </div>
+    </div>
+
+    <button id="menu-button" onclick="openMenu()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="gray" width="80%" height="80%" viewBox="0 0 24 24"><path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z"/></svg>
+    </button>
+
+    <div id="menu" class="menu">
+        <p class="menu-list-item" style="margin-bottom: 1vh;">Recent files</p>
+        <hr>
+        <div id="menu-recent"></div>
     </div>
 
     <form action="new-multidoc" id="create-new-mdoc" method="post">
@@ -46,6 +58,58 @@
                 document.getElementById('create-new-mdoc').submit();
             }
         }
+
+        function openMenu(){
+            $('.menu').toggleClass('menu-active');
+        }
+
+        function getNameByLink(src){
+            var out = null;
+            link = {
+                source : src
+            }
+            $.ajax({
+                async: false,
+                url: 'get-doc-title',
+                type: 'POST',
+                contentType : "application/json",
+                data : JSON.stringify(link),
+                success: function (data) {
+                    out = data;
+                },
+                error : function(e) {
+                    console.log("ERROR: ", e);
+                }
+            })
+            return out;
+        }
+
+        function getAllCookies(){
+            var x = [];
+            for ( var i = 0; i < localStorage.length; i++ ) {
+              if (localStorage.getItem("link"+i) != null){
+                  x.push(localStorage.getItem("link"+i));
+              }
+            }
+            return x;
+        }
+
+        function loadLinksFromCookies(){
+            var x = getAllCookies();
+            var name;
+            if (x.length > 0){
+                html = '';
+                for (var i = 0; i < x.length; i++){
+                    name = getNameByLink(x[i].substring(x[i].indexOf('=')+1));
+                    if (name != ''){
+                        html += '<a class="menu-list-link menu-list-item" href="'+ x[i] +'">'+name+'</a>';
+                    }
+                }
+                document.getElementById('menu-recent').innerHTML = html;
+            }
+        }
+
+        loadLinksFromCookies();
     </script>
 
 </body>
