@@ -262,21 +262,6 @@ public class MainController {
     }
 
     @ResponseBody
-    @GetMapping("download-document/{link}")
-    public DownloadPdfResponse downloadDocumentRequest(@PathVariable String link) {
-
-        byte[] array = new byte[0];
-        try {
-            //array = ModelUtil.getHtmlToPdf(link, documentRepository);
-            array = ModelUtil.getHtmlToPdfIText(link, documentRepository);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new DownloadPdfResponse(ModelUtil.getDocumentTitle(link, documentRepository), array);
-
-    }
-
-    @ResponseBody
     @GetMapping("download-document-string/{link}")
     public String downloadDocumentAsStringRequest(@PathVariable String link) {
 
@@ -339,19 +324,8 @@ public class MainController {
 
     }
 
-//    @GetMapping("get-preferred/{link}")
-//    public String getPreferredRequest(@PathVariable String link, RedirectAttributes attributes){
-//
-//        System.out.println(link);
-//        attributes.addAttribute("link", link);
-//        return "redirect:print";
-//
-//    }
-
     @GetMapping("print/{link}")
     public String printRequest(@PathVariable String link, Model model){
-
-        System.out.println("link: " + link);
 
         Document d = documentRepository.findById(link).get();
         ModelUtil.getPreferredVersionsList(d);
