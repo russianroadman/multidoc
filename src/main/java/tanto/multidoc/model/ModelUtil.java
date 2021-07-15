@@ -97,7 +97,7 @@ public class ModelUtil {
         return documentRepository.findById(link).get().getTitle();
     }
 
-    public static byte[] getHtmlToPdf(String link, DocumentRepository documentRepository){
+    public static byte[] getHtmlToPdf(String link, DocumentRepository documentRepository) throws Exception {
 
         Document document = documentRepository.findById(link).get();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

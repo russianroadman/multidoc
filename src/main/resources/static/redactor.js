@@ -538,6 +538,7 @@ function getNameByLink(src){
 }
 
 function downloadDocument(){
+    openMenu();
     var request = 'download-document/'+window.location.search.toString().substring(6);
     $.ajax({
         url: request,

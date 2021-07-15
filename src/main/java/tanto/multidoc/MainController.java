@@ -273,9 +273,11 @@ public class MainController {
     public DownloadPdfResponse downloadDocumentRequest(@PathVariable String link) {
 
         byte[] array = new byte[0];
-        //array = ModelUtil.getPdf(link);
-        array = ModelUtil.getHtmlToPdf(link, documentRepository);
-
+        try {
+            array = ModelUtil.getHtmlToPdf(link, documentRepository);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return new DownloadPdfResponse(ModelUtil.getDocumentTitle(link, documentRepository), array);
 
     }
