@@ -1,4 +1,4 @@
-package tanto.multidoc;
+package tanto.multidoc.Functionality;
 
 import com.fasterxml.jackson.annotation.JsonView;
 

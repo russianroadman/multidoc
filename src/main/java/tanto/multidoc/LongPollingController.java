@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
-import tanto.multidoc.Functionality.UpdateRequest;
-import tanto.multidoc.Functionality.UpdateResponse;
-import tanto.multidoc.model.Version;
+import tanto.multidoc.Functionality.BigUpdateRequest;
+import tanto.multidoc.Functionality.BigUpdateResponse;
+import tanto.multidoc.Functionality.JsonBlock;
 import tanto.multidoc.repos.DocumentRepository;
 
 import java.util.ArrayList;

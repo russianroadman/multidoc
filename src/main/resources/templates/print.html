@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width">
+    <title>MULTIDOC</title>
+    <link rel="icon" type="image/png" th:href="@{../static/fav.png}">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/29.0.0/decoupled-document/ckeditor.js"></script>
+</head>
+
+<body id="body" style="display:flex; justify-content:center;">
+
+    <div id="container" style="display:none" th:utext="${content}"></div>
+    <div id="editor"></div>
+
+</body>
+
+
+<script>
+    DecoupledEditor
+        .create( document.querySelector( '#editor' ) )
+        .then( editor => {
+            let text = document.getElementById("container").innerHTML;
+            editor.setData( text );
+            window.print();
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
+</html>

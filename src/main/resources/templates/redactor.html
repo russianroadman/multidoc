@@ -3,12 +3,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width">
-    <title>MDOC</title>
+    <title>MULTIDOC</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <link rel="icon" type="image/png" th:href="@{../static/fav.png}">
-<!--    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/decoupled-document/ckeditor.js"></script>-->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 </head>
 <body>
 
@@ -19,21 +17,6 @@
     <button id="link-button" onclick="share()">🡭</button>
     <input id="mdoc-title" onchange="saveDocTitle(this)" th:value="${title}">
 
-<!--    <div class="button-container-wrapper">-->
-<!--        <div class="button-container">-->
-<!--            <button class="button-container-button" style="background:#ABEBC6">open</button>-->
-<!--            <button class="button-container-button" style="background:#AED6F1">share</button>-->
-<!--            <button class="button-container-button" style="background:#EC7063">delete</button>-->
-<!--            <button class="button-container-button" style="background:#D2B4DE">collect</button>-->
-<!--        </div>-->
-<!--        <div class="button-container">-->
-<!--            <button class="button-container-button" style="background:#FADBD8">delete block</button>-->
-<!--            <button class="button-container-button" style="background:#F5B7B1">delete version</button>-->
-<!--            <button class="button-container-button" style="background:#F5B041">star</button>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div id="toolbar-container"></div>-->
 </div>
 
 <div id="menu" class="menu">
@@ -92,9 +75,6 @@
                     <button class="context-actions-button" onclick="deleteVersion(this)" style="border-top:1px solid lightgray; border-bottom:1px solid lightgray;">delete version</button>
                     <button class="context-actions-button" onclick="closeEditorContextMenu(this)">close</button>
                 </div>
-
-<!--                <textarea class="textarea-editor" onkeyup="saveVersion(this)">[[${block.getVersions().get(0).getContent()}]]</textarea>-->
-<!--                <textarea class="textarea-editor-fake" onkeyup="saveVersion(this);">[[${block.getVersions().get(0).getContent()}]]</textarea>-->
 
 <!--                CKEDITOR                        -->
                 <div class="editor" onkeyup="saveVersionCKEditor(this);"></div>

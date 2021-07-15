@@ -4,6 +4,7 @@ import com.aspose.pdf.HtmlLoadOptions;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import tanto.multidoc.repos.DocumentRepository;
@@ -115,6 +116,47 @@ public class ModelUtil {
         doc.save(stream);
 
         return stream.toByteArray();
+    }
+
+    public static byte[] getHtmlToPdfIText(String link, DocumentRepository documentRepository) throws IOException, DocumentException {
+
+        Document doc = documentRepository.findById(link).get();
+
+        com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+        ArrayList<String> c = getEntireVersionsListContents(getPreferredVersionsList(doc));
+        String initialString = "";
+        for (String item : c){
+            initialString += "<br>" + item;
+        }
+        InputStream inputStream = new ByteArrayInputStream(initialString.getBytes());
+
+        PdfWriter writer = PdfWriter.getInstance(document, stream);
+
+        document.open();
+
+        XMLWorkerHelper.getInstance().parseXHtml(writer, document, inputStream);
+
+        document.close();
+
+        return stream.toByteArray();
+
+    }
+
+    public static String getHtmlAsString(String link, DocumentRepository documentRepository){
+
+        Document doc = documentRepository.findById(link).get();
+
+        ArrayList<String> c = getEntireVersionsListContents(getPreferredVersionsList(doc));
+        String initialString = "";
+        for (String item : c){
+            initialString += "<br>" + item;
+        }
+
+        return initialString;
+
     }
 
 }

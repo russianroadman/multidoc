@@ -1,14 +1,10 @@
 package tanto.multidoc;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tanto.multidoc.Functionality.*;
 import tanto.multidoc.model.Block;
@@ -18,9 +14,6 @@ import tanto.multidoc.model.Version;
 import tanto.multidoc.repos.DocumentRepository;
 import tanto.multidoc.util.Util;
 
-import javax.print.Doc;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -274,11 +267,22 @@ public class MainController {
 
         byte[] array = new byte[0];
         try {
-            array = ModelUtil.getHtmlToPdf(link, documentRepository);
+            //array = ModelUtil.getHtmlToPdf(link, documentRepository);
+            array = ModelUtil.getHtmlToPdfIText(link, documentRepository);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return new DownloadPdfResponse(ModelUtil.getDocumentTitle(link, documentRepository), array);
+
+    }
+
+    @ResponseBody
+    @GetMapping("download-document-string/{link}")
+    public String downloadDocumentAsStringRequest(@PathVariable String link) {
+
+        String string = ModelUtil.getHtmlAsString(link, documentRepository);
+
+        return string;
 
     }
 
@@ -333,6 +337,35 @@ public class MainController {
 
         return new BigUpdateResponse(list);
 
+    }
+
+//    @GetMapping("get-preferred/{link}")
+//    public String getPreferredRequest(@PathVariable String link, RedirectAttributes attributes){
+//
+//        System.out.println(link);
+//        attributes.addAttribute("link", link);
+//        return "redirect:print";
+//
+//    }
+
+    @GetMapping("print/{link}")
+    public String printRequest(@PathVariable String link, Model model){
+
+        System.out.println("link: " + link);
+
+        Document d = documentRepository.findById(link).get();
+        ModelUtil.getPreferredVersionsList(d);
+
+        ArrayList<String> c = ModelUtil.getEntireVersionsListContents(
+                ModelUtil.getPreferredVersionsList(d));
+        String initialString = "";
+        for (String item : c){
+            initialString += "<br>" + item;
+        }
+
+        model.addAttribute("content", initialString);
+
+        return "print";
     }
 
 }

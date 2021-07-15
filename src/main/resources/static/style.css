@@ -513,6 +513,26 @@ body{
     box-shadow: none !important;
 }
 
+@media print {
 
+  #top-bar {
+    display:none;
+  }
 
+  .block {
+    visibility:hidden;
+  }
 
+  .editor {
+    visibility:visible;
+  }
+
+  #menu{
+    display:none;
+  }
+
+  #add-block-button{
+    display:none;
+  }
+
+}

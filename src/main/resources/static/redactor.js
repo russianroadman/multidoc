@@ -13,7 +13,7 @@ window.onload = function() {
 
 function setDownloadDocWrapper(){
     var link = window.location.search.toString().substring(6);
-    document.getElementById("download-document-wrapper").innerHTML = '<button style="background:#82b2ff; color:white" class="menu-list-button menu-list-item" onclick="downloadDocument()">Download .pdf</button>'
+    document.getElementById("download-document-wrapper").innerHTML = '<button style="background:#82b2ff; color:white" class="menu-list-button menu-list-item" onclick="downloadDocument()">Convert to PDF</button>'
 }
 
 function setDocumentWrapper(){
@@ -539,19 +539,48 @@ function getNameByLink(src){
 
 function downloadDocument(){
     openMenu();
-    var request = 'download-document/'+window.location.search.toString().substring(6);
-    $.ajax({
-        url: request,
-        type: 'GET',
-        success: function (data) {
-            var sampleArr = base64ToArrayBuffer(data.bytes);
-            saveByteArray(data.title, sampleArr);
-        },
-        error : function(e) {
-            console.log("ERROR: ", e);
-        }
-    })
+
+    window.location.href = 'print/'+window.location.search.toString().substring(6);
+
+//    var request = 'download-document/'+window.location.search.toString().substring(6);
+//    $.ajax({
+//        url: request,
+//        type: 'GET',
+//        success: function (data) {
+//            var sampleArr = base64ToArrayBuffer(data.bytes);
+//            saveByteArray(data.title, sampleArr);
+//        },
+//        error : function(e) {
+//            console.log("ERROR: ", e);
+//        }
+//    })
+
+//    var request = 'download-document-string/'+window.location.search.toString().substring(6);
+//    $.ajax({
+//        url: request,
+//        type: 'GET',
+//        success: function (data) {
+//            console.log(data);
+//        },
+//        error : function(e) {
+//            console.log("ERROR: ", e);
+//        }
+//    })
+
+
+
+//    var request = 'print/'+window.location.search.toString().substring(6);
+//    $.ajax({
+//        url: request,
+//        type: 'GET',
+//        error : function(e) {
+//            console.log("ERROR: ", e);
+//        }
+//    })
+
 }
+
+
 
 /************** PDF **************/
 function base64ToArrayBuffer(base64) {
