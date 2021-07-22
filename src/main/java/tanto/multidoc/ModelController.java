@@ -107,7 +107,6 @@ public class ModelController {
         Document doc = new Document(docTitle, link);
         doc.addBlock(block);
 
-        /* comment line below if database has no tables */
         documentRepository.save(doc);
 
         attributes.addAttribute("link", link);

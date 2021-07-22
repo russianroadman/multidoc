@@ -31,11 +31,6 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("/info")
-    public String infoRequest(){
-        return "info";
-    }
-
     @GetMapping("redactor")
     public String redactorRequest(Model model, @RequestParam String link){
         Document doc = documentRepository.findById(link).get();
@@ -74,7 +69,6 @@ public class MainController {
         String link = Util.getUniqueLink();
         Document doc = Util.getExampleDocument(link);
 
-        /* comment line below if database has no tables */
         documentRepository.save(doc);
 
         attributes.addAttribute("link", link);

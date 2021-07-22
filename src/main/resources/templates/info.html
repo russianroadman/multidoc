@@ -4,9 +4,49 @@
     <meta charset="UTF-8">
     <title>MULTIDOC</title>
     <link rel="icon" type="image/png" th:href="@{../static/fav.png}">
+    <link href="info-style.css" rel="stylesheet" type="text/css" />
     <link href="index-style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <img src="../static/images/mdoc.png" width="100%" th:src="@{images/mdoc.png}"/>
+    <div class="sign">What is Multidoc?</div>
+    <img src="../static/images/f1.png" width="100%" th:src="@{images/f1.png}"/>
+    <img src="../static/images/f2.png" width="100%" th:src="@{images/f2.png}"/>
+    <img src="../static/images/f3.png" width="100%" th:src="@{images/f3.png}"/>
+    <img src="../static/images/f4.png" width="100%" th:src="@{images/f4.png}"/>
+    <div class="sign">Try it!</div>
+
+    <div style="border : 5px solid #9559FF; border-radius:2vw; padding:2vw">
+        <form action="new-multidoc" id="create-new-mdoc" method="post">
+            <input class="new-doc-input" id="docTitle" name="docTitle" placeholder="Document title">
+            <input class="new-doc-input" id="blockTitle" name="blockTitle" placeholder="First block title">
+            <input class="new-doc-input" id="author" name="author" placeholder="Author name">
+            <button id="create-new" type="button" onclick="create()">Create new Multidoc</button>
+        </form>
+        <center>or</center>
+        <form action="new-multidoc-default" id="create-default-mdoc" method="get">
+            <button id="use-default">Use example template</button>
+        </form>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="made-by">
+        <div>Made by Kislov Alexander</div>
+        <div>Irkutsk 2021</div>
+    </div>
+
+    <script>
+        function create(){
+            var d = document.getElementById('docTitle').value;
+            var b = document.getElementById('blockTitle').value;
+            var a = document.getElementById('author').value;
+            if ( d != '' && b != '' && a != '' ){
+                document.getElementById('create-new-mdoc').submit();
+            }
+        }
+    </script>
+
 </body>
 </html>

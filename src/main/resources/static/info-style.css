@@ -1,0 +1,26 @@
+* {
+    margin:0;
+    padding:0;
+}
+
+body{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.sign{
+    font-family : consolas;
+    font-size : 300%;
+    font-weight : 900;
+    color : white;
+    padding:1vw;
+    width: 80vw;
+    margin:2vw;
+    border-radius:999px;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    background : #9559FF;
+}
+
