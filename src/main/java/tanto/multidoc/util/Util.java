@@ -12,6 +12,7 @@ public class Util {
     public static String getUniqueLink(){
         return UUID.randomUUID().toString();
     }
+    private static final long LATENCY = 1;
 
     public static Document getExampleDocument(String link){
 
@@ -35,24 +36,20 @@ public class Util {
 
     }
 
-    public static String stringifyDocument(Document d){
-        String out = d.getTitle() + ":\n";
-        for (Block b : d.getBlocks()){
-            out += "  block " + b.getTitle() + ":\n";
-            for (Version v : b.getVersions()){
-                out += "    " + v.getAuthor() + " : " + v.getContent() + "\n";
-            }
-            out+="\n";
-        }
-        return out;
-    }
-
     public static String getFinalDocument(List<Version> versions){
         String out = "";
         for (Version v : versions){
             out += v.getContent() + "\n";
         }
         return out;
+    }
+
+    public static void sleep(){
+        try {
+            Thread.sleep(LATENCY);
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

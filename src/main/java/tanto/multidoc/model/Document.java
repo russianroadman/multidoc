@@ -3,6 +3,7 @@ package tanto.multidoc.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Document {
@@ -23,6 +24,12 @@ public class Document {
 
     public Document(String title){
         this.title = title;
+    }
+
+    public Document(String link, String title, List<Block> blocks) {
+        this.link = link;
+        this.title = title;
+        this.blocks = blocks;
     }
 
     public int getDocLength(){
@@ -59,14 +66,32 @@ public class Document {
 
     public boolean equalContent(Document d) {
         if(
-            this.link.equals(d.getLink()) &&
-            (
-                    ModelUtil.getEntireVersionsListContents(ModelUtil.getEntireVersionsList(this))
-                            .equals(ModelUtil.getEntireVersionsListContents(ModelUtil.getEntireVersionsList(d)))
-            )
+            this.toString().equals(d.toString())
         ){
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Document document = (Document) o;
+        return Objects.equals(link, document.link) && Objects.equals(title, document.title) && Objects.equals(blocks, document.blocks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(link, title, blocks);
+    }
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "link='" + link + '\'' +
+                ", title='" + title + '\'' +
+                ", blocks=" + blocks +
+                '}';
     }
 }

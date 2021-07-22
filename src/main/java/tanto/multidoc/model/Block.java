@@ -6,6 +6,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Block {
@@ -24,6 +25,10 @@ public class Block {
     public Block(String title, Version version){
         this.title = title;
         versions.add(version);
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public void addVersion(String author, boolean isPreferred){
@@ -76,4 +81,34 @@ public class Block {
         return preferred;
     }
 
+    public void setVersions(List<Version> versions) {
+        this.versions = versions;
+    }
+
+    public void setId(Integer id) {
+        /* not good */
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Block block = (Block) o;
+        return Objects.equals(id, block.id) && Objects.equals(title, block.title) && Objects.equals(versions, block.versions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, versions);
+    }
+
+    @Override
+    public String toString() {
+        return "Block{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", versions=" + versions +
+                '}';
+    }
 }

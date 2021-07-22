@@ -16,7 +16,6 @@
     </button>
     <button id="link-button" onclick="share()">🡭</button>
     <input id="mdoc-title" onchange="saveDocTitle(this)" th:value="${title}">
-
 </div>
 
 <div id="menu" class="menu">
@@ -56,54 +55,50 @@
 
 <div id="content" th:fragment="content">
 
-    <div class="block" th:each="block : ${blocks}">
-        <div class="block-content">
-            <div class="editor-wrapper">
-                <div th:switch="${block.getVersions().get(0).isPreferred()}" class="editor-bar">
-                    <button th:case="true" class="editor-star-version" onclick="starVersion(this)">
-                        <svg fill="#fff491" class="editor-star-version-svg" xmlns="http://www.w3.org/2000/svg" width="1.5vw" height="1.5vw" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
-                    </button>
-                    <button th:case="false" class="editor-star-version" onclick="starVersion(this)">
-                        <svg fill="#efefef" class="editor-star-version-svg" xmlns="http://www.w3.org/2000/svg" width="1.5vw" height="1.5vw" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
-                    </button>
-                    <button class="editor-actions" onclick="openContextActions(this)">
-                        •••
-                    </button>
-                </div>
-                <div class="context-actions">
-                    <button class="context-actions-button" onclick="deleteBlock(this)">delete block</button>
-                    <button class="context-actions-button" onclick="deleteVersion(this)" style="border-top:1px solid lightgray; border-bottom:1px solid lightgray;">delete version</button>
-                    <button class="context-actions-button" onclick="closeEditorContextMenu(this)">close</button>
-                </div>
-
-<!--                CKEDITOR                        -->
-                <div class="editor" onkeyup="saveVersionCKEditor(this);"></div>
-<!--                CKEDITOR                        -->
-
-            </div>
-        </div>
-        <div class="block-controller">
-            <div class="left-ctrl">
-                <div class="block-number" th:text="${blocks.indexOf(block)+1}"></div>
-                <input class="block-name" onchange="saveBlockTitle(this)" th:value="${block.getTitle()}">
-            </div>
-            <div class="middle-ctrl">
-                <button class="block-left" onclick="changeVersion(this, false)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="lightgrey" width="2vh" height="2vh" viewBox="0 0 24 24"><path d="M3 12l18-12v24z"/></svg>
-                </button>
-                <div class="block-version">1</div>/<div class="block-version block-max-version" th:text="${block.getVersions().size()}"></div>
-                <button class="block-right" onclick="changeVersion(this, true)">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="lightgrey" width="2vh" height="2vh" viewBox="0 0 24 24"><path d="M21 12l-18 12v-24z"/></svg>
-                </button>
-            </div>
-            <div class="right-ctrl">
-                <input class="block-author" th:value="${block.getVersions().get(0).getAuthor()}" onchange="saveVersionAuthor(this)">
-                <button class="block-add-version" onclick="showNewVersion(this)">
-                    <svg fill="gray" xmlns="http://www.w3.org/2000/svg" width="2vh" height="2vh" viewBox="0 0 24 24"><path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z"/></svg>
-                </button>
-            </div>
-        </div>
-    </div>
+<!--    <div class="block" th:each="block : ${blocks}">-->
+<!--        <div class="block-content">-->
+<!--            <div class="editor-wrapper">-->
+<!--                <div th:switch="${block.getVersions().get(0).isPreferred()}" class="editor-bar">-->
+<!--                    <button th:case="true" class="editor-star-version" onclick="starVersion(this)">-->
+<!--                        <svg fill="#fff491" class="editor-star-version-svg" xmlns="http://www.w3.org/2000/svg" width="1.5vw" height="1.5vw" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>-->
+<!--                    </button>-->
+<!--                    <button th:case="false" class="editor-star-version" onclick="starVersion(this)">-->
+<!--                        <svg fill="#efefef" class="editor-star-version-svg" xmlns="http://www.w3.org/2000/svg" width="1.5vw" height="1.5vw" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>-->
+<!--                    </button>-->
+<!--                    <button class="editor-actions" onclick="openContextActions(this)">-->
+<!--                        •••-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="context-actions">-->
+<!--                    <button class="context-actions-button" onclick="deleteBlock(this)">delete block</button>-->
+<!--                    <button class="context-actions-button" onclick="deleteVersion(this)" style="border-top:1px solid lightgray; border-bottom:1px solid lightgray;">delete version</button>-->
+<!--                    <button class="context-actions-button" onclick="closeEditorContextMenu(this)">close</button>-->
+<!--                </div>-->
+<!--                <div class="editor" onkeyup="saveVersionCKEditor(this);"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="block-controller">-->
+<!--            <div class="left-ctrl">-->
+<!--                <div class="block-number" th:text="${blocks.indexOf(block)+1}"></div>-->
+<!--                <input class="block-name" onchange="saveBlockTitle(this)" th:value="${block.getTitle()}">-->
+<!--            </div>-->
+<!--            <div class="middle-ctrl">-->
+<!--                <button class="block-left" onclick="changeVersion(this, false)">-->
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" fill="lightgrey" width="2vh" height="2vh" viewBox="0 0 24 24"><path d="M3 12l18-12v24z"/></svg>-->
+<!--                </button>-->
+<!--                <div class="block-version">1</div>/<div class="block-version block-max-version" th:text="${block.getVersions().size()}"></div>-->
+<!--                <button class="block-right" onclick="changeVersion(this, true)">-->
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" fill="lightgrey" width="2vh" height="2vh" viewBox="0 0 24 24"><path d="M21 12l-18 12v-24z"/></svg>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="right-ctrl">-->
+<!--                <input class="block-author" th:value="${block.getVersions().get(0).getAuthor()}" onchange="saveVersionAuthor(this)">-->
+<!--                <button class="block-add-version" onclick="showNewVersion(this)">-->
+<!--                    <svg fill="gray" xmlns="http://www.w3.org/2000/svg" width="2vh" height="2vh" viewBox="0 0 24 24"><path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z"/></svg>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 
 </div>
 
@@ -121,17 +116,9 @@
     </button>
 </center>
 
-
+<script src="new.js"></script>
 <script src="redactor.js"></script>
 <script src="script.js"></script>
-
-<!--CKEDITOR-->
-
-<script>
-
-    applyEditors();
-
-</script>
 
 </body>
 </html>
