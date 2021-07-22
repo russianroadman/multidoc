@@ -24,7 +24,8 @@ public class JSONModelConverter {
                         version.getId().toString(),
                         version.getAuthor(),
                         version.getContent(),
-                        version.isPreferred() ? "true" : "false"
+                        version.isPreferred() ? "true" : "false",
+                        version.isBeingEdited() ? "true" : "false"
                 ));
             }
 
@@ -57,11 +58,17 @@ public class JSONModelConverter {
                     isPreferred = true;
                 }
 
+                boolean isBeingEdited = false;
+                if (version.getIsBeingEdited().equals("true")){
+                    isBeingEdited = true;
+                }
+
                 versionList.add(new Version(
                         Integer.parseInt(version.getId()),
                         version.getAuthor(),
                         version.getContent(),
-                        isPreferred
+                        isPreferred,
+                        isBeingEdited
                 ));
 
             }

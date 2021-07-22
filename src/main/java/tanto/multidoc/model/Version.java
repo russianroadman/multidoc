@@ -13,6 +13,7 @@ public class Version {
     @Column(columnDefinition = "TEXT")
     private String content = "";
     private boolean isPreferred = false;
+    private boolean isBeingEdited = false;
 
     public Version(){}
 
@@ -21,16 +22,25 @@ public class Version {
         this.isPreferred = isPreferred;
     }
 
-    public Version(Integer id, String author, String content, boolean isPreferred) {
+    public Version(Integer id, String author, String content, boolean isPreferred, boolean isBeingEdited) {
         this.id = id;
         this.author = author;
         this.content = content;
         this.isPreferred = isPreferred;
+        this.isBeingEdited = isBeingEdited;
     }
 
     public Version(String author) {
         this.author = author;
         this.isPreferred = true;
+    }
+
+    public boolean isBeingEdited() {
+        return isBeingEdited;
+    }
+
+    public void setBeingEdited(boolean beingEdited) {
+        isBeingEdited = beingEdited;
     }
 
     public Integer getId() {
@@ -93,6 +103,7 @@ public class Version {
                 ", author='" + author + '\'' +
                 ", content='" + content + '\'' +
                 ", isPreferred=" + isPreferred +
+                ", isBeingEdited=" + isBeingEdited +
                 '}';
     }
 }

@@ -16,13 +16,25 @@ public class JSONVersion {
     @JsonView
     String isPreferred;
 
+    @JsonView
+    String isBeingEdited;
+
     public JSONVersion() {}
 
-    public JSONVersion(String id, String author, String content, String isPreferred) {
+    public JSONVersion(String id, String author, String content, String isPreferred, String isBeingEdited) {
         this.id = id;
         this.author = author;
         this.content = content;
         this.isPreferred = isPreferred;
+        this.isBeingEdited = isBeingEdited;
+    }
+
+    public String getIsBeingEdited() {
+        return isBeingEdited;
+    }
+
+    public void setIsBeingEdited(String isBeingEdited) {
+        this.isBeingEdited = isBeingEdited;
     }
 
     public String getId() {
@@ -59,11 +71,12 @@ public class JSONVersion {
 
     @Override
     public String toString() {
-        return "\nJSONVersion{" +
+        return "JSONVersion{" +
                 "id='" + id + '\'' +
                 ", author='" + author + '\'' +
                 ", content='" + content + '\'' +
                 ", isPreferred='" + isPreferred + '\'' +
-                "}\n";
+                ", isBeingEdited='" + isBeingEdited + '\'' +
+                '}';
     }
 }

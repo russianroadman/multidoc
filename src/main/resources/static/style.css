@@ -513,6 +513,36 @@ body{
     box-shadow: none !important;
 }
 
+.alert {
+  display: none;
+  position: fixed;
+  z-index : 10;
+  top : 30vh;
+  height : 10vh;
+  width : 30vw;
+  left : 35vw;
+  border-radius: 999px;
+  background-color: #f44336;
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  background: none;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
 @media print {
 
   #top-bar {

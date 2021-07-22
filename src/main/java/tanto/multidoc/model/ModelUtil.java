@@ -88,6 +88,7 @@ public class ModelUtil {
                 v.setAuthor(version.getAuthor());
                 v.setContent(version.getContent());
                 v.setPreferred(version.isPreferred());
+                v.setBeingEdited(version.isBeingEdited());
                 versionList.add(v);
 
             }

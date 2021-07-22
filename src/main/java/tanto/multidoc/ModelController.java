@@ -14,6 +14,7 @@ import tanto.multidoc.model.Block;
 import tanto.multidoc.model.Document;
 import tanto.multidoc.model.Version;
 import tanto.multidoc.repos.DocumentRepository;
+import tanto.multidoc.repos.VersionRepository;
 import tanto.multidoc.util.Util;
 
 import java.util.List;
@@ -25,6 +26,9 @@ public class ModelController {
 
     @Autowired
     DocumentRepository documentRepository;
+
+    @Autowired
+    VersionRepository versionRepository;
 
     private ExecutorService clients = Executors.newFixedThreadPool(5);
 
@@ -111,33 +115,33 @@ public class ModelController {
         return "redirect:redactor";
     }
 
-    @PostMapping("new-block")
-    public String newBlockRequest(@RequestBody NewBlockRequest block,
-                                  Model model){
+//    @PostMapping("new-block")
+//    public String newBlockRequest(@RequestBody NewBlockRequest block,
+//                                  Model model){
+//
+//        Document doc = documentRepository.findById(block.getLink()).get();
+//        doc.addBlock(new Block(block.getBlockTitle(), new Version(block.getAuthor(), true)));
+//        documentRepository.save(doc);
+//
+//        model.addAttribute("title", doc.getTitle());
+//        model.addAttribute("blocks", doc.getBlocks());
+//
+//        return "redactor::content";
+//    }
 
-        Document doc = documentRepository.findById(block.getLink()).get();
-        doc.addBlock(new Block(block.getBlockTitle(), new Version(block.getAuthor(), true)));
-        documentRepository.save(doc);
-
-        model.addAttribute("title", doc.getTitle());
-        model.addAttribute("blocks", doc.getBlocks());
-
-        return "redactor::content";
-    }
-
-    @PostMapping("new-version")
-    public String newVersionRequest(@RequestBody NewVersionRequest version, Model model){
-        Version ver = new Version(version.getAuthor(), false);
-
-        Document doc = documentRepository.findById(version.getLink()).get();
-        doc.getBlocks().get(version.getBlockNumber()).addVersion(ver);
-        documentRepository.save(doc);
-
-        model.addAttribute("title", doc.getTitle());
-        model.addAttribute("blocks", doc.getBlocks());
-
-        return "redactor::content";
-    }
+//    @PostMapping("new-version")
+//    public String newVersionRequest(@RequestBody NewVersionRequest version, Model model){
+//        Version ver = new Version(version.getAuthor(), false);
+//
+//        Document doc = documentRepository.findById(version.getLink()).get();
+//        doc.getBlocks().get(version.getBlockNumber()).addVersion(ver);
+//        documentRepository.save(doc);
+//
+//        model.addAttribute("title", doc.getTitle());
+//        model.addAttribute("blocks", doc.getBlocks());
+//
+//        return "redactor::content";
+//    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("delete-block/{link}/{index}")
@@ -243,17 +247,21 @@ public class ModelController {
 
     }
 
-    public SaveVersionAuthorResponse saveVersionAuthorRequest(@RequestBody SaveVersionAuthorRequest author){
-        Document doc = documentRepository.findById(author.getLink()).get();
-        doc.getBlocks()
-                .get(author.getBlockNumber())
-                .getVersions()
-                .get(author.getVersionNumber())
-                .setAuthor(author.getContent());
-        documentRepository.save(doc);
-        return new SaveVersionAuthorResponse(author.getContent(),
-                Integer.toString(author.getBlockNumber()),
-                Integer.toString(author.getVersionNumber()));
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("save-focus/{link}/{vId}/{condition}")
+    public void saveFocus(@PathVariable String link,
+                          @PathVariable String vId,
+                          @PathVariable String condition){
+
+        Document d = documentRepository.findById(link).get();
+        Version v;
+        if (d != null){
+            v = versionRepository.findById(Integer.parseInt(vId)).get();
+            if (condition.equals("true")) v.setBeingEdited(true);
+            else v.setBeingEdited(false);
+            versionRepository.save(v);
+        }
+
     }
 
 
