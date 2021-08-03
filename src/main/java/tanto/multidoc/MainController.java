@@ -7,15 +7,12 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tanto.multidoc.Functionality.*;
-import tanto.multidoc.model.Block;
 import tanto.multidoc.model.Document;
 import tanto.multidoc.model.ModelUtil;
-import tanto.multidoc.model.Version;
 import tanto.multidoc.repos.DocumentRepository;
 import tanto.multidoc.util.Util;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -29,6 +26,11 @@ public class MainController {
     @GetMapping("/")
     public String mainPageRequest(){
         return "index";
+    }
+
+    @GetMapping("/info")
+    public String infoRequest(){
+        return "info";
     }
 
     @GetMapping("redactor")

@@ -1,12 +1,5 @@
-
-window.onload = function() {
-    console.log('window loaded');
-}
-
 var editors = [];
 var focusedElement = null;
-var blockAdded = false;
-var versionAdded = false;
 
 forceUpdateDoc();
 updateDoc();
@@ -379,8 +372,6 @@ function starVersion(element){
         url : "star-version/"+link+"/"+blockIndex+"/"+versionIndex,
         success : function() {
             console.log('version marked as favourite');
-            //editors[blockIndex].editing.view.focus();
-            //block.getElementsByClassName('editor-star-version-svg')[0].style.fill = '#fff491';
         },
         error : function(e) {
             console.log("ERROR: ", e);
@@ -483,7 +474,6 @@ function saveDocTitle(element){
 function applyEditors(){
     editors = [];
     var x = document.getElementsByClassName('editor');
-    //console.log(x);
     var i;
     for (i = 0; i < x.length; i++){
         BalloonEditor
@@ -527,7 +517,6 @@ function applyEditors(){
                 editors.push(editor);
                 let v = editors.length-1;
 
-                //editor.setData(doc.blocks[v].versions[0].content);
                 let vId = document.getElementsByClassName('block')[v].getElementsByClassName('versionId')[0].value;
                 editor.setData(getVersionById(vId).content);
 
@@ -547,81 +536,4 @@ function applyEditors(){
             } );
     }
 
-}
-
-function applyEditorsWithFocused(fi, ed){
-    editors = [];
-    var x = document.getElementsByClassName('editor');
-    var i;
-    for (i = 0; i < x.length; i++){
-
-        if (i != fi){
-
-            BalloonEditor
-            .create( x[i], {
-            toolbar: {
-                items: [
-                    'fontFamily',
-                    'fontSize',
-                    'fontColor',
-                    'fontBackgroundColor',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'bulletedList',
-                    'numberedList',
-                    'insertTable',
-                    'undo',
-                    'redo',
-                    'alignment',
-                    'removeFormat'
-                ]
-            },
-            language: 'en',
-            image: {
-                toolbar: [
-                    'imageTextAlternative',
-                    'imageStyle:full',
-                    'imageStyle:side'
-                ]
-            },
-            table: {
-                contentToolbar: [
-                    'tableColumn',
-                    'tableRow',
-                    'mergeTableCells'
-                ]
-            },
-                licenseKey: ''
-            } )
-            .then( editor => {
-
-                if (editors.length == fi){
-                    editors.push(ed);
-                }
-
-                editors.push(editor);
-                let v = editors.length-1;
-                editor.setData(doc.blocks[v].versions[0].content);
-
-                editor.model.document.on( 'change:data', () => {
-                    setModelVersionContent(v, editor.getData());
-                    saveDoc();
-                } );
-
-                editor.editing.view.document.on( 'change:isFocused', (a, b, c) => {
-                    focus(v, c);
-                } );
-
-            } )
-            .catch( error => {
-                console.error( 'Oops, something went wrong!' );
-                console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-                console.warn( 'Build id: kipsbl6tnqa0-dwsdpsjqxezr' );
-                console.error( error );
-            } );
-
-        }
-
-    }
 }

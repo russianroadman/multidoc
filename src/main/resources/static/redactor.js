@@ -1,13 +1,8 @@
-var focused = null;
-//var editors = [];
-
 window.onload = function() {
     setDownloadDocWrapper();
     setDocumentWrapper();
     loadLinksFromCookies();
     addLinkToCookies();
-//    updateVersions();
-//    updateVersionsCKEditor();
 };
 
 function setDownloadDocWrapper(){
